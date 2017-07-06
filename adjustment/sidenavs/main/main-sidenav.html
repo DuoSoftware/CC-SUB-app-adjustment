@@ -1,0 +1,102 @@
+<!-- SIDENAV HEADER -->
+<div class="header" layout="column" layout-align="space-between start">
+
+    <div class="logo" layout="row" layout-align="start center">
+        <span class="logo-icon">
+          <img src="app/core/app_icons/adjustment_app_icon.png" alt=""/>
+        </span>
+        <span class="logo-text">Adjustment</span>
+    </div>
+
+    <!-- <div class="account">
+        <div class="title">John Doe</div>
+        <md-select class="account-selection simplified" placeholder="Mail Selection"
+                   ng-model="vm.selectedAccount">
+            <md-option ng-repeat="(provider, address) in vm.accounts" value="{{provider}}">{{address}}
+            </md-option>
+        </md-select>
+    </div> -->
+
+</div>
+<!-- / SIDENAV HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<md-content ms-scroll class="content" flex>
+
+    <div class="compose-button">
+        <md-button class="md-accent md-raised" aria-label="compose"
+                   ng-click="vm.addAdjustmentDialog($event)">{{vm.addButtonDisplayText}}
+        </md-button>
+    </div>
+
+    <div class="navigation-simple" layout="column" ng-if="vm.appInnerState == 'default' && vm.activeAdjustmentPaneIndex == 0">
+        <md-button class="item" aria-label="inbox" ng-click="loadAdjustments('0')">
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-inbox" class="s16"></md-icon>
+                <span class="title">All Adjustments</span>
+            </div>
+        </md-button>
+
+        <md-button class="item" aria-label="starred" ng-click="loadAdjustments('1')">
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-minus" class="s16"></md-icon>
+                <span class="title" flex>Credit Adjustments</span>
+            </div>
+        </md-button>
+
+        <md-button class="item" aria-label="important" ng-click="loadAdjustments('2')">
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-plus" class="s16"></md-icon>
+                <span class="title" flex>Debit Adjustments</span>
+            </div>
+        </md-button>
+
+        <!--<div class="item subheader">Adjustment Labels</div>-->
+
+        <!--<md-button class="item" aria-label="label notes">-->
+            <!--<div layout="row" layout-align="start center">-->
+                <!--<md-icon md-font-icon="icon-label" class="s16 green-fg"></md-icon>-->
+                <!--<span class="title">Smart Phone</span>-->
+            <!--</div>-->
+        <!--</md-button>-->
+
+        <!--<md-button class="item" aria-label="label paypal">-->
+            <!--<div layout="row" layout-align="start center">-->
+                <!--<md-icon md-font-icon="icon-label" class="s16 orange-fg"></md-icon>-->
+                <!--<span class="title">Accessory</span>-->
+            <!--</div>-->
+        <!--</md-button>-->
+
+        <!--<md-button class="item" aria-label="label invoices">-->
+            <!--<div layout="row" layout-align="start center">-->
+                <!--<md-icon md-font-icon="icon-label" class="s16 blue-grey-fg"></md-icon>-->
+                <!--<span class="title">Tab</span>-->
+            <!--</div>-->
+        <!--</md-button>-->
+
+        <!--<md-button class="item" aria-label="label amazon">-->
+            <!--<div layout="row" layout-align="start center">-->
+                <!--<md-icon md-font-icon="icon-label" class="s16 blue-fg"></md-icon>-->
+                <!--<span class="title">Smart Watch</span>-->
+            <!--</div>-->
+        <!--</md-button>-->
+
+        <!--<md-divider></md-divider>-->
+
+        <!--<md-button class="item" aria-label="settings">-->
+            <!--<div layout="row" layout-align="start center">-->
+                <!--<md-icon md-font-icon="icon-cog" class="s16"></md-icon>-->
+                <!--<span class="title">Settings</span>-->
+            <!--</div>-->
+        <!--</md-button>-->
+
+        <!--<md-button class="item" aria-label="help">-->
+            <!--<div layout="row" layout-align="start center">-->
+                <!--<md-icon md-font-icon="icon-help" class="s16"></md-icon>-->
+                <!--<span class="title">Help</span>-->
+            <!--</div>-->
+        <!--</md-button>-->
+    </div>
+
+</md-content>
+<!-- / SIDENAV CONTENT -->

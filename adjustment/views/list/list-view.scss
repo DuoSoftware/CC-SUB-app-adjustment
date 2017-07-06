@@ -1,0 +1,101 @@
+#adjmail {
+  .list-header{
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #bbbbbb;
+    padding: 5px 16px;
+  }
+  .sort_btn{
+    padding: 0;
+    margin: 0;
+    height: 35px;
+    md-icon{
+      color: #cccccc;
+      font-size: 14px;
+    }
+    .merged{
+      height: 10px;
+    }
+  }
+
+  .mail-list-pane {
+
+        .mail-list-item {
+            position: relative;
+            padding: 5px 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+            cursor: pointer;
+            font-size: 14px!important;
+
+            &.read {
+              background: #eeeeee;
+            }
+
+            &.unread {
+                background: #FFFFFF;
+
+                .info {
+
+                    .subject,
+                    .message {
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            &.selected {
+                background: #E3F2FD;
+            }
+
+            &.checked {
+                background: #FFF8E1;
+            }
+
+            .info {
+                .prodImage{
+                    .listMedia {
+                        min-width: 70px;
+                        width: 70px;
+                        height: 70px;
+                        line-height: 70px;
+                    }
+
+                    .has-attachment {
+                        margin-left: 8px;
+                        transform: rotate(90deg);
+                    }
+                }
+
+                .prodMainInfo {
+                    font-size: 14px;
+                    font-weight: 400;
+                    padding-left: 0px;
+                    padding-bottom: 0px;
+                    text-transform: uppercase;
+                    color:#05a3ec;
+
+                  .code {
+                    font-size: 13px;
+                    font-weight:400;
+                    text-transform: capitalize;
+                    color:#979797;
+                    }
+                }
+
+                .prodCost{
+                    font-size:14px;
+                    font-weight:400;
+                    color:#707070;
+                }
+
+                .message {
+                    color: rgba(0, 0, 0, 0.54);
+                }
+            }
+
+            .time {
+                margin: 0 8px;
+            }
+        }
+    }
+}

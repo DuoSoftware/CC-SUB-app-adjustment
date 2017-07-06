@@ -1,0 +1,155 @@
+<md-dialog class="compose-dialog" aria-label="New Message">
+    <form class="md-inline-form" name="adjustmentAdd" >
+        <md-toolbar class="md-accent md-hue-2">
+            <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+                <span class="title">New Adjustment</span>
+                <md-button class="md-icon-button" ng-click="vm.closeDialog()" aria-label="Close dialog">
+                    <md-icon md-font-icon="icon-close"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+
+
+        <md-dialog-content ms-scroll>
+
+          <div class="section_padding">
+            <div layout-gt-sm="row">
+
+
+              <md-content layout="row" layout-align="space-between center" style="padding:10px;">
+                <!--<div><text style="color:#929292" >Start date</text></div>-->
+                <div>
+                  <md-autocomplete id="cutomerauto"
+                                   ng-required="true"
+                                   md-select-on-match
+                                   ng-keypress="enter($event)"
+                                   ng-disabled="!isloadDone"
+                                   md-input-name="autocompleteField"
+                                   md-no-cache="ctrl.noCache"
+                                   md-selected-item="rows.customer"
+                                   md-search-text="ctrl.searchText[pro.line]"
+                                   md-floating-label="Customer"
+                                   md-items="prod in querySearch(ctrl.searchText[pro.line])"
+                                   md-item-text="prod.customerName"
+                                   md-selected-item-change="loadInvoices()">
+                    <md-not-found>No customers.</md-not-found>
+                    <md-item-template>
+                      <span md-highlight-text="ctrl.searchText">{{prod.customerName}}</span>
+                    </md-item-template>
+                  </md-autocomplete>
+                </div>
+              </md-content>
+
+              <div hide-xs hide-sm flex-gt-sm="15">
+              </div>
+
+              <md-input-container class="md-block" flex-gt-sm style="margin-left: -80px;">
+                <md-content layout="row" layout-align="space-between center" style="padding:10px;">
+                  <label>Adjustment date</label>
+                  <input ng-required="true" ng-disabled="true" minlength="null" md-maxlength="null" type="" min="0" name="current date" ng-pattern="" ng-model="currentDate">
+
+                </md-content></md-input-container>
+            </div>
+
+            <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Invoice No.</label>
+                <md-select  ng-model="content.invoiceid" id="invoiceid" data-screen-name="invoiceid">
+                  <!--<md-option  value="" ng-click="addCat()">Add Product</md-option>-->
+                  <md-option ng-repeat="value in invoices" value="{{value.invoiceid}}" aria-selected="{{value.invoiceid == clickRow.invoiceid}}">
+                    {{value.invoiceno}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+
+            </div>
+
+            <br/><br/>
+
+            <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm >
+                <!--<label>A</label>-->
+                <label>Adjustment type</label>
+                <md-select  required ng-model="content.adjustmenttype" id="adjustmenttypeid" data-screen-name="adjustmenttypeid">
+                  <!--<md-option  value="" ng-click="addCat()">Add Product</md-option>-->
+                  <md-option ng-repeat="value in adjTypes" value="{{value.aId}}" aria-selected="{{value.aId == clickRow.adjustmenttypeid}}">
+                    {{value.aType}}
+                  </md-option>
+                </md-select>
+                <div ng-messages="adjustmentAdd.adjustmenttypeid.$error">
+                  <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                    Please select adjustment type
+                  </div>
+                </div>
+              </md-input-container>
+
+              <div hide-xs hide-sm flex-gt-sm="5">
+              </div>
+
+
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Adjustment amount</label>
+                <input ng-required="true" ng-change="changeAmount()" minlength="null" md-maxlength="null" type="number" min="0" name="default1" ng-pattern="" ng-model="content.amount">
+                <div ng-messages="adjustmentAdd.default1.$error">
+                  <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                    Please add adjustment amount
+                  </div>
+                </div>
+              </md-input-container>
+
+              <div hide-xs hide-sm flex-gt-sm="5">
+              </div>
+
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Converted amount</label>
+                <input disabled ng-required="true" minlength="null" md-maxlength="null" type="number" min="0" name="convertedAmount" ng-pattern="" ng-model="adjustAmount ">
+
+              </md-input-container>
+            </div>
+
+            <div layout="row" style="margin-bottom: -22px">
+              <md-input-container class="md-block" flex="50">
+                <label>Currency</label>
+                <md-select ng-required="false"  name="prefferedCurrency" ng-model="content.preferredCurrency" ng-change="calcRate(content.amount)">
+                  <md-select-label>Currency</md-select-label>
+                  <md-divider></md-divider>
+                  <md-option ng-repeat="currencyType in prefferedCurrencies" ng-value="currencyType">{{currencyType}}</md-option>
+                </md-select>
+              </md-input-container>
+              <md-input-container class="md-block" flex="50">
+                <label>Rate</label>
+                <input disabled type="number"  ng-model="exchangeRate">
+              </md-input-container>
+            </div>
+
+            <br/>
+            <br/>
+            <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Notes</label>
+                <input  minlength="null" md-maxlength="null" type="" min="0" name="note" ng-pattern="" ng-model="content.note">
+              </md-input-container>
+            </div>
+
+
+          </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" layout-align="space-between center">
+            <div layout="row" layout-align="start center">
+                <md-button ng-click="submit()" class="send-button md-accent md-raised" aria-label="Create Adjustment">
+                    Create
+                </md-button>
+            </div>
+
+            <div layout="row">
+                <md-button class="md-icon-button" aria-label="Delete" ng-click="clearForm()">
+                    <md-icon md-font-icon="icon-delete"></md-icon>
+                    <md-tooltip>Clear Adjustment</md-tooltip>
+                </md-button>
+            </div>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

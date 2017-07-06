@@ -1,0 +1,75 @@
+<!-- PRODUCT Headers -->
+<!--<div class="mail-list-item0">-->
+
+<!--<div layout="row" layout-align="start center">-->
+
+
+
+<!--<div class="info" flex layout="row">-->
+
+<!--<div class="prodMainInfo" layout="column" layout-align="center" style="width: 190px;">-->
+<!--<span class="text-truncate"><h3>Customer</h3></span>-->
+<!--&lt;!&ndash;<div class="code text-truncate">&ndash;&gt;-->
+<!--&lt;!&ndash;Adjustment id : {{adjustment.guadjustmentid}}&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+
+<!--<div class="prodMainInfo" flex layout="column" layout-align="right end">-->
+<!--<span class="text-truncate">Adj.type</span>-->
+<!--</div>-->
+<!--<div class="prodMainInfo" flex layout="column" layout-align="right end">-->
+<!--<span class="text-truncate">Amount</span>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;<div layout="row" layout-align="space-between end">&ndash;&gt;-->
+<!--&lt;!&ndash;<md-button class="md-icon-button" ng-click="vm.toggleStarred(adjustment, $event)"&ndash;&gt;-->
+<!--&lt;!&ndash;aria-label="Toggle starred">&ndash;&gt;-->
+<!--&lt;!&ndash;<md-icon ng-if="adjustment.starred" md-font-icon="icon-star"&ndash;&gt;-->
+<!--&lt;!&ndash;class="amber-fg"></md-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;<md-icon ng-if="!adjustment.starred" md-font-icon="icon-star-outline"></md-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;</md-button>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+
+<!-- PRODUCT LIST ITEMS -->
+
+<div class="mail-list-item" ng-repeat="adjustment in vm.adjustments | filter: vm.search | filter: global.search"
+     md-ink-ripple
+     ng-click="vm.selectAdjustment(adjustment)"
+     ng-class="{'selected': vm.selectedAdjustment === adjustment}">
+
+  <div layout="row" layout-align="start center">
+
+
+    <div class="info" flex layout="row">
+
+      <div class="prodMainInfo" layout="column" layout-align="center start" style="width: 190px;" flex>
+        <span class="text-truncate">{{adjustment.customer}}</span>
+        <div class="code text-truncate">
+          Adjustment id : {{adjustment.guadjustmentid}}
+        </div>
+      </div>
+
+      <div class="prodCost" flex layout="column" layout-align="center start">
+        <span>{{adjustment.createdDate | parseDate | date: 'dd'}} {{adjustment.createdDate | parseDate | date: 'MMMM' | limitTo:3}} {{adjustment.createdDate | parseDate | date: 'yyyy'}}</span>
+
+      </div>
+
+      <div class="prodCost" flex layout="column" layout-align="center start">
+        <span class="text-truncate">{{adjustment.adjustmenttype}}</span>
+      </div>
+
+      <div class="prodCost" flex="10" layout="column" layout-align="center end">
+        <span class="ammount">{{adjustment.amount | isoCurrency:adjustment.currency :decimalPoint}}</span>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="adjustment-list-item" layout="row" layout-align="center center" ng-show="showMoreButton">
+  <md-button ng-click="loadMoreAdjustment()" class="md-primary" style="font-size: 12px;font-weight: 400"><md-icon md-font-icon="icon-magnify"></md-icon> More</md-button>
+</div>
+<!-- PRODUCT LIST ITEMS -->
