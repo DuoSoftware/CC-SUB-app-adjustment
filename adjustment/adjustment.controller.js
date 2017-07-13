@@ -1,4 +1,4 @@
-(function () 
+(function ()
 {
   'use strict';
 
@@ -45,6 +45,28 @@
     vm.toggleCheck = toggleCheck;
    // $scope.searchMoreInit = false;
 
+    function gst(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      //debugger;
+      return null;
+    }
+
+    function getDomainName() {
+      var _st = gst("domain");
+      return (_st != null) ? _st : ""; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
+    }
+
+    function getDomainExtension() {
+      var _st = gst("extension_mode");
+      return (_st != null) ? _st : "test"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
+    }
+
 
     $scope.invoiceSubTotal =0;
     $scope.invoiceAmount = 0;
@@ -72,7 +94,7 @@
     $scope.content = [];
 
     $scope.prefferedCurrencies=[];
-    $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","FrequentCurrencies").success(function(dataa) {
+    $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","FrequentCurrencies").success(function(dataa) {
       $scope.isSpinnerShown=true;
 
 
@@ -82,11 +104,11 @@
       }
       $scope.isSpinnerShown=false;
     }).error(function(data) {
-      console.log(data);
+      //console.log(data);
       $scope.isSpinnerShown=false;
     })
 
-    $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","BaseCurrency").success(function(data) {
+    $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","BaseCurrency").success(function(data) {
 
       $scope.isSpinnerShown=true;
       $scope.baseCurrency=data[0]['RecordFieldData'];
@@ -94,19 +116,19 @@
       $scope.content.preferredCurrency=$scope.baseCurrency;
       $scope.isSpinnerShown=false;
     }).error(function(data) {
-      console.log(data);
+      //console.log(data);
       $scope.isSpinnerShown=false;
     })
 
-    $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","DecimalPointLength").success(function(data) {
+    $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","DecimalPointLength").success(function(data) {
       $scope.decimalPoint=parseInt(data[0].RecordFieldData);
       //
       //
     }).error(function(data) {
-      console.log(data);
+      //console.log(data);
     });
 
-    $charge.commondata().getDuobaseValuesByTableName("CTS_FooterAttributes").success(function(data) {
+    $charge.settingsapp().getDuobaseValuesByTableName("CTS_FooterAttributes").success(function(data) {
       $scope.FooterData=data;
       $scope.content.greeting=data[0].RecordFieldData;
       $scope.content.disclaimer=data[1].RecordFieldData!=""?atob(data[1].RecordFieldData):"";
@@ -115,20 +137,20 @@
 
 
     $scope.prefixInvoice = "INV";
-    $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InvoiceAttributes","InvoicePrefix").success(function(data) {
+    $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InvoiceAttributes","InvoicePrefix").success(function(data) {
       var invoicePrefix=data[0];
       $scope.prefixInvoice=invoicePrefix!=""?invoicePrefix.RecordFieldData:"INV";
       //
     }).error(function(data) {
-      console.log(data);
+      //console.log(data);
     });
 
     $scope.lenPrefix = "4";
-    $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InvoiceAttributes","PrefixLength").success(function(data) {
+    $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InvoiceAttributes","PrefixLength").success(function(data) {
       var prefixLength=data[0];
       $scope.lenPrefix=prefixLength!=0? parseInt(prefixLength.RecordFieldData):0;
     }).error(function(data) {
-      console.log(data);
+      //console.log(data);
     });
 
 
@@ -137,17 +159,43 @@
 
     $scope.loadInitialCustomers = function(){
 
-      $charge.profile().filterStatus(1,0,10,'desc').success(function (data) {
-        //console.log(data);
-        for (var i = 0; i < data.length; i++) {
+      var dbName="";
+      dbName=getDomainName().split('.')[0]+"_"+getDomainExtension();
+      //filter="api-version=2016-09-01&?search=*&$orderby=createdDate desc&$skip="+skip+"&$top="+take+"&$filter=(domain eq '"+dbName+"')";
+      var data={
+        "search": "*",
+        "filter": "(domain eq '"+dbName+"')",
+        "orderby" : "createddate desc",
+        "top":10,
+        "skip":0
+      }
 
-          var profileId = data[i]["profileId"];
+
+      $charge.azuresearch().getAllProfilesPost(data).success(function (data) {
+        for (var i = 0; i < data.value.length; i++) {
+          if(data.value[i].status==0)
+          {
+            data.value[i].status=false;
+          }
+          else
+          {
+            data.value[i].status=true;
+          }
+          data.value[i].createddate = new Date(data.value[i].createddate);
+          //tempList.push(data.value[i]);
+        }
+        //vm.profiles = tempList;
+        //skipProfileSearch += takeProfileSearch;
+        //$scope.loadPaging(keyword, skipProfileSearch, takeProfileSearch);
+        for (var i = 0; i < data.value.length; i++) {
+
+          var profileId = data.value[i]["profileId"];
           var pro_name = "";
-          if (data[i]["profile_type"] == "Business") {
-            pro_name = data[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+          if (data.value[i]["profile_type"] == "Business") {
+            pro_name = data.value[i]["business_name"]; // data[i]["business_contact_name"]+" "+
 
           } else {
-            pro_name = data[i]["first_name"] + " " + data[i]["last_name"];
+            pro_name = data.value[i]["first_name"] + " " + data.value[i]["last_name"];
           }
 
           $scope.isCustSearchDisable = false;
@@ -155,15 +203,40 @@
 
         }
 
-
       }).error(function (data) {
-        console.log(data);
-
+        //vm.profiles = [];
         $scope.isCustSearchDisable = false;
 
         $scope.initialCustomers = [];
-
       });
+
+      //$charge.profile().filterStatus(1,0,10,'desc').success(function (data) {
+      //  //console.log(data);
+      //  for (var i = 0; i < data.length; i++) {
+      //
+      //    var profileId = data[i]["profileId"];
+      //    var pro_name = "";
+      //    if (data[i]["profile_type"] == "Business") {
+      //      pro_name = data[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+      //
+      //    } else {
+      //      pro_name = data[i]["first_name"] + " " + data[i]["last_name"];
+      //    }
+      //
+      //    $scope.isCustSearchDisable = false;
+      //    $scope.initialCustomers.push({customerId: profileId, customerName: pro_name});
+      //
+      //  }
+      //
+      //
+      //}).error(function (data) {
+      //  console.log(data);
+      //
+      //  $scope.isCustSearchDisable = false;
+      //
+      //  $scope.initialCustomers = [];
+      //
+      //});
 
     }
 
@@ -178,20 +251,46 @@
     //var pdz = [];
     $scope.getCustomer = function(keyWord) {
       ////console.log($scope.customers.length);
-      $charge.profile().filterByKey(keyWord,$scope.s, t).success(function (data) {
+      var dbName="";
+      dbName=getDomainName().split('.')[0]+"_"+getDomainExtension();
+      //filter="api-version=2016-09-01&?search=*&$orderby=createdDate desc&$skip="+skip+"&$top="+take+"&$filter=(domain eq '"+dbName+"')";
+      var data={
+        "search": keyWord+"*",
+        "searchFields": "first_name,last_name,email_addr,phone",
+        "filter": "(domain eq '"+dbName+"')",
+        "orderby" : "createddate desc",
+        "top":t,
+        "skip":$scope.s
+      }
 
-        //console.log(data);
-        for (var i = 0; i < data.length; i++) {
+
+      $charge.azuresearch().getAllProfilesPost(data).success(function (data) {
+        for (var i = 0; i < data.value.length; i++) {
+          if(data.value[i].status==0)
+          {
+            data.value[i].status=false;
+          }
+          else
+          {
+            data.value[i].status=true;
+          }
+          data.value[i].createddate = new Date(data.value[i].createddate);
+          //tempList.push(data.value[i]);
+        }
+        //vm.profiles = tempList;
+        //skipProfileSearch += takeProfileSearch;
+        //$scope.loadPaging(keyword, skipProfileSearch, takeProfileSearch);
+        for (var i = 0; i < data.value.length; i++) {
           //
 
-          var profileId = data[i]["profileId"];
+          var profileId = data.value[i]["profileId"];
           var pro_name = "";
-          if(data[i]["profile_type"] == "Business")
+          if(data.value[i]["profile_type"] == "Business")
           {
-            pro_name = data[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+            pro_name = data.value[i]["business_name"]; // data[i]["business_contact_name"]+" "+
 
           }else{
-            pro_name = data[i]["first_name"]+" "+data[i]["last_name"];
+            pro_name = data.value[i]["first_name"]+" "+data.value[i]["last_name"];
           }
 
           $scope.customers.push({customerId: profileId, customerName: pro_name});
@@ -204,19 +303,50 @@
 
         return $scope.customers;
 
-
       }).error(function (data) {
-        console.log(data);
-
-        //var customer = {};
-        //customer.customerlst = angular.copy($scope.customers);
-        //
-        //$scope.rows.push(customer);
-
-
+        //vm.profiles = [];
         $scope.isloadDone = true;
+      });
 
-      })
+      //$charge.profile().filterByKey(keyWord,$scope.s, t).success(function (data) {
+      //
+      //  //console.log(data);
+      //  for (var i = 0; i < data.length; i++) {
+      //    //
+      //
+      //    var profileId = data[i]["profileId"];
+      //    var pro_name = "";
+      //    if(data[i]["profile_type"] == "Business")
+      //    {
+      //      pro_name = data[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+      //
+      //    }else{
+      //      pro_name = data[i]["first_name"]+" "+data[i]["last_name"];
+      //    }
+      //
+      //    $scope.customers.push({customerId: profileId, customerName: pro_name});
+      //
+      //  }
+      //
+      //  $scope.s += t;
+      //
+      //
+      //
+      //  return $scope.customers;
+      //
+      //
+      //}).error(function (data) {
+      //  console.log(data);
+      //
+      //  //var customer = {};
+      //  //customer.customerlst = angular.copy($scope.customers);
+      //  //
+      //  //$scope.rows.push(customer);
+      //
+      //
+      //  $scope.isloadDone = true;
+      //
+      //})
     }
 
 
@@ -271,7 +401,7 @@
         // $scope.isLoading = false;
       }).error(function(data) {
         $scope.isSpinnerShown = false;
-        console.log(data);
+        //console.log(data);
         $scope.skip = 0;
         $scope.take = 0;
         $take = 0;
@@ -335,7 +465,7 @@
         // $scope.isLoading = false;
       }).error(function(data) {
         $scope.isSpinnerShown = false;
-        console.log(data);
+        //console.log(data);
         $scope.s = 0;
         vm.listLoaded = true;
         $scope.skip = 0;
@@ -415,26 +545,52 @@
 
           $scope.isCustSearchDisable = true;
 
-          $charge.profile().filterByCatKey( $scope.s, t,'customer',query).success(function (data) {
-            //console.log(data);
-           // $scope.customers = [];
-            if(data.length == 0){
+          var dbName="";
+          dbName=getDomainName().split('.')[0]+"_"+getDomainExtension();
+          //filter="api-version=2016-09-01&?search=*&$orderby=createdDate desc&$skip="+skip+"&$top="+take+"&$filter=(domain eq '"+dbName+"')";
+          var data={
+            "search": query+"*",
+            "searchFields": "first_name,last_name,email_addr,phone",
+            "filter": "(domain eq '"+dbName+"')",
+            "orderby" : "createddate desc",
+            "top":t,
+            "skip":$scope.s
+          }
+
+
+          $charge.azuresearch().getAllProfilesPost(data).success(function (data) {
+            for (var i = 0; i < data.value.length; i++) {
+              if(data.value[i].status==0)
+              {
+                data.value[i].status=false;
+              }
+              else
+              {
+                data.value[i].status=true;
+              }
+              data.value[i].createddate = new Date(data.value[i].createddate);
+              //tempList.push(data.value[i]);
+            }
+            //vm.profiles = tempList;
+            //skipProfileSearch += takeProfileSearch;
+            //$scope.loadPaging(keyword, skipProfileSearch, takeProfileSearch);
+            if(data.value.length == 0){
               $scope.isQuerySearchEmpty = true;
             }
-            for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.value.length; i++) {
 
-              var profileId = data[i]["profileId"];
+              var profileId = data.value[i]["profileId"];
               var pro_name = "";
-              if (data[i]["profile_type"] == "Business") {
-                pro_name = data[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+              if (data.value[i]["profile_type"] == "Business") {
+                pro_name = data.value[i]["business_name"]; // data[i]["business_contact_name"]+" "+
 
               } else {
-                pro_name = data[i]["first_name"] + " " + data[i]["last_name"];
+                pro_name = data.value[i]["first_name"] + " " + data.value[i]["last_name"];
               }
 
               $scope.isCustSearchDisable = false;
 
-              if ($filter('filter')($scope.customers, {customerId: data[i]["profileId"]})[0]) {
+              if ($filter('filter')($scope.customers, {customerId: data.value[i]["profileId"]})[0]) {
 
               } else {
                 $scope.customers.push({customerId: profileId, customerName: pro_name});
@@ -443,17 +599,55 @@
 
             $scope.s += t;
 
-            if($scope.s === data.length){
+            if($scope.s === data.value.length){
               $scope.querySearch(finalKeyword);
             }
 
           }).error(function (data) {
-            console.log(data);
-
+            //vm.profiles = [];
             $scope.isCustSearchDisable = false;
             return $scope.customers;
-
           });
+
+          //$charge.profile().filterByCatKey( $scope.s, t,'customer',query).success(function (data) {
+          //  //console.log(data);
+          // // $scope.customers = [];
+          //  if(data.length == 0){
+          //    $scope.isQuerySearchEmpty = true;
+          //  }
+          //  for (var i = 0; i < data.length; i++) {
+          //
+          //    var profileId = data[i]["profileId"];
+          //    var pro_name = "";
+          //    if (data[i]["profile_type"] == "Business") {
+          //      pro_name = data[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+          //
+          //    } else {
+          //      pro_name = data[i]["first_name"] + " " + data[i]["last_name"];
+          //    }
+          //
+          //    $scope.isCustSearchDisable = false;
+          //
+          //    if ($filter('filter')($scope.customers, {customerId: data[i]["profileId"]})[0]) {
+          //
+          //    } else {
+          //      $scope.customers.push({customerId: profileId, customerName: pro_name});
+          //    }
+          //  }
+          //
+          //  $scope.s += t;
+          //
+          //  if($scope.s === data.length){
+          //    $scope.querySearch(finalKeyword);
+          //  }
+          //
+          //}).error(function (data) {
+          //  console.log(data);
+          //
+          //  $scope.isCustSearchDisable = false;
+          //  return $scope.customers;
+          //
+          //});
 
         }
 
@@ -518,7 +712,7 @@
 
         // $scope.isLoading = false;
       }).error(function(data) {
-        console.log(data);
+        //console.log(data);
       })
     }
 
@@ -557,7 +751,7 @@
           // $scope.isLoading = false;
         }).error(function(data) {
           $scope.isSpinnerShown = false;
-          console.log($scope.data);
+          //console.log($scope.data);
           closeReadPane();
           vm.adjustments = $scope.data;
           vm.listLoaded = true;
@@ -650,7 +844,7 @@
 
           }
         }).error(function (data) {
-          console.log(data);
+          //console.log(data);
           notifications.toast("Error adding record, " + data['error'], "error");
           $scope.isSaveClicked = false;
         })
@@ -788,7 +982,7 @@
 
         }).error(function (data) {
           rate = 1;
-          console.log('error');
+          //console.log('error');
           $scope.isInvoiceLoaded = true;
         })
 
@@ -862,7 +1056,7 @@
 
           // $scope.isLoading = false;
         }).error(function(data) {
-          console.log(data);
+          //console.log(data);
         })
 
 
@@ -871,7 +1065,7 @@
         $charge.profile().getByID(adjustment.customerId).success(function(data) {
 
 
-          console.log(data);
+          //console.log(data);
           for(var i=0;i<data.length;i++)
           {
             $scope.customerAddress = data[i].bill_addr;
@@ -882,7 +1076,7 @@
 
           // $scope.isLoading = false;
         }).error(function(data) {
-          console.log(data);
+          //console.log(data);
         })
 
       }
@@ -905,7 +1099,7 @@
     }
 
     $scope.compinfo={};
-    $charge.commondata().getDuobaseValuesByTableName("CTS_CompanyAttributes").success(function(data) {
+    $charge.settingsapp().getDuobaseValuesByTableName("CTS_CompanyAttributes").success(function(data) {
       $scope.CompanyProfile=data;
       $scope.compinfo.companyName=data[0].RecordFieldData;
       $scope.compinfo.companyAddress=data[1].RecordFieldData;
