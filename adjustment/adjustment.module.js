@@ -1,9 +1,9 @@
 ////////////////////////////////
 // App : Adjustment
 // Owner  : Ishara Gunathilaka
-// Last changed date : 2017/07/13
-// Version : 6.1.0.2
-// Modified By : Gihan
+// Last changed date : 2017/07/20
+// Version : 6.1.0.3
+// Modified By : Kasun
 /////////////////////////////////
 
 
@@ -18,8 +18,6 @@
     /** @ngInject */
     function config($stateProvider, msNavigationServiceProvider, mesentitlementProvider)
     {
-        mesentitlementProvider.setStateCheck("adjustment");
-
         $stateProvider
             .state('app.adjustment', {
                 url    : '/adjustment',
@@ -29,15 +27,27 @@
                         controller : 'AdjustmentController as vm'
                     }
                 },
-                resolve: {
-                   security: ['$q','mesentitlement', function($q,mesentitlement){
-                        var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');
+				resolve: {
+					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
+						return $q(function(resolve, reject) {
+							$timeout(function() {
+								if ($rootScope.isBaseSet2) {
+									resolve(function () {
+										var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');
 
-                        if(entitledStatesReturn !== true){
-                              return $q.reject("unauthorized");
-                        };
-                    }]
-                },
+										mesentitlementProvider.setStateCheck("adjustment");
+
+										if(entitledStatesReturn !== true){
+											return $q.reject("unauthorized");
+										}
+									});
+								} else {
+									return $location.path('/guide');
+								}
+							});
+						});
+					}]
+				},
                 bodyClass: 'adjustment'
             });
 
