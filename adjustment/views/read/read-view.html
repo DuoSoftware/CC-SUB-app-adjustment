@@ -474,7 +474,7 @@
                     <md-card flex class="input-block-gen">
                         <md-card-title>
                             <div layout="row" layout-align="start center">
-                                <md-icon md-font-icon="icon-swap-vertical" style="margin-right: 15px;"></md-icon><md-icon md-font-icon="icon-swap-vertical" style="left: 40px;position: absolute;"></md-icon> <h3>Adjustment Details</h3>
+                                <md-icon md-font-icon="icon-credit-card-multiple"></md-icon> <h3>Payment Details</h3>
                             </div>
                         </md-card-title>
                         <md-card-content>
@@ -489,12 +489,18 @@
                                 <!--</md-input-container>-->
                             <!--</div>-->
                             <div layout="row">
-                                <md-input-container flex="30">
-                                    <label>Currency</label>
-                                    <md-select ng-required="false" name="prefferedCurrency" ng-model="content.preferredCurrency" ng-change="calcRate(content.amount)">
-                                        <md-option ng-repeat="currencyType in prefferedCurrencies" ng-value="currencyType">{{currencyType}}</md-option>
-                                    </md-select>
-                                </md-input-container>
+                                <!--<md-input-container flex="30">-->
+                                    <!--<label>Currency</label>-->
+                                    <!--<md-select ng-required="false" name="prefferedCurrency" ng-model="content.preferredCurrency" ng-change="calcRate(content.amount)">-->
+                                        <!--<md-option ng-repeat="currencyType in prefferedCurrencies" ng-value="currencyType">{{currencyType}}</md-option>-->
+                                    <!--</md-select>-->
+                                <!--</md-input-container>-->
+                                <div layout="row" layout-align="start center" flex="30" class="state-capsule">
+                                    <div layout="row">
+                                        <span>Currency</span>
+                                        <span>{{baseCurrency}}</span>
+                                    </div>
+                                </div>
 
                                 <div flex="5"></div>
 
