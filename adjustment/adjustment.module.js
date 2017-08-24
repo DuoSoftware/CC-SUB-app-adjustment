@@ -32,9 +32,10 @@
 						return $q(function(resolve, reject) {
                             resolve(function () {
                                 msNavigationServiceProvider.saveItem('adjustment', {
-                                title    : 'adjustment',
-                                state    : 'app.adjustment',
-                                weight   : 5
+                                    title    : 'adjustment',
+                                    state    : 'app.adjustment',
+                                    weight   : 5
+                                });
                             });
 
 							$timeout(function() {
