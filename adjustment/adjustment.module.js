@@ -30,15 +30,16 @@
 				resolve: {
 					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
 						return $q(function(resolve, reject) {
-							$timeout(function() {
-                                if($rootScope.isSuperAdmin == null){
-                                    msNavigationServiceProvider.saveItem('adjustment', {
-                                        title    : 'adjustment',
-                                        state    : 'app.adjustment',
-                                        weight   : 5
-                                    });
-                                }
+                            if($rootScope.isSuperAdmin == null){
+                                debugger;
+                                msNavigationServiceProvider.saveItem('adjustment', {
+                                    title    : 'adjustment',
+                                    state    : 'app.adjustment',
+                                    weight   : 5
+                                });
+                            }
 
+							$timeout(function() {
 								if ($rootScope.isBaseSet2 && $rootScope.isSuperAdmin != 'true') {
 									resolve(function () {
 										var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');
