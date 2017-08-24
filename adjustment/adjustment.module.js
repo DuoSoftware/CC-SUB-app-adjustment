@@ -18,6 +18,9 @@
     /** @ngInject */
     function config($stateProvider, msNavigationServiceProvider, mesentitlementProvider)
     {
+        var initInjector = angular.injector(["ng"]);
+        var $rootScope = initInjector.get("$rootScope");
+        
         $stateProvider
             .state('app.adjustment', {
                 url    : '/adjustment',
@@ -52,10 +55,13 @@
                 bodyClass: 'adjustment'
             });
 
-             msNavigationServiceProvider.saveItem('adjustment', {
-                                    title    : 'adjustment',
-                                    state    : 'app.adjustment',
-                                    weight   : 5
-                                });
+            if($rootScope.isSuperAdmin != 'true'){
+                msNavigationServiceProvider.saveItem('adjustment', {
+                    title    : 'adjustment',
+                    state    : 'app.adjustment',
+                    weight   : 5
+                });  
+            }
+       
     }
 })();
