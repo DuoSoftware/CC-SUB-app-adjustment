@@ -1,8 +1,8 @@
 ////////////////////////////////
 // App : Adjustment
 // Owner  : Ishara Gunathilaka
-// Last changed date : 2017/07/25
-// Version : 6.1.0.4
+// Last changed date : 2017/08/24
+// Version : 6.1.0.5
 // Modified By : Kasun
 /////////////////////////////////
 
@@ -31,7 +31,7 @@
 					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
 						return $q(function(resolve, reject) {
 							$timeout(function() {
-								if ($rootScope.isBaseSet2) {
+								if ($rootScope.isBaseSet2 && $rootScope.isSuperAdmin != 'true') {
 									resolve(function () {
 										var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');
 
@@ -40,6 +40,12 @@
 										if(entitledStatesReturn !== true){
 											return $q.reject("unauthorized");
 										}
+
+                                        msNavigationServiceProvider.saveItem('adjustment', {
+                                            title    : 'adjustment',
+                                            state    : 'app.adjustment',
+                                            weight   : 5
+                                        });
 									});
 								} else {
 									return $location.path('/guide');
@@ -50,11 +56,5 @@
 				},
                 bodyClass: 'adjustment'
             });
-
-        msNavigationServiceProvider.saveItem('adjustment', {
-            title    : 'adjustment',
-            state    : 'app.adjustment',
-            weight   : 5
-        });
     }
 })();
