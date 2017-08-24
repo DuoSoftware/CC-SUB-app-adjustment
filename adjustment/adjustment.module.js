@@ -18,8 +18,20 @@
     /** @ngInject */
     function config($stateProvider, msNavigationServiceProvider, mesentitlementProvider)
     {
-        var initInjector = angular.injector(["ng"]);
-        var $rootScope = initInjector.get("$rootScope");
+        function gst(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            //debugger;
+            return null;
+        }
+        /** Check for Super admin */
+        var isSuperAdmin = gst('isSuperAdmin');
+        /** Check for Super admin - END */
         
         $stateProvider
             .state('app.adjustment', {
@@ -35,7 +47,7 @@
 						return $q(function(resolve, reject) {
 
 							$timeout(function() {
-								if ($rootScope.isBaseSet2 && $rootScope.isSuperAdmin != 'true') {
+								if ($rootScope.isBaseSet2 && isSuperAdmin != 'true') {
 									resolve(function () {
 										var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');
 
@@ -55,7 +67,7 @@
                 bodyClass: 'adjustment'
             });
 
-            if($rootScope.isSuperAdmin != 'true'){
+            if(isSuperAdmin != 'true'){
                 msNavigationServiceProvider.saveItem('adjustment', {
                     title    : 'adjustment',
                     state    : 'app.adjustment',
