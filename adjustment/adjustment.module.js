@@ -30,7 +30,8 @@
 				resolve: {
 					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
 						return $q(function(resolve, reject) {
-                            msNavigationServiceProvider.saveItem('adjustment', {
+                            resolve(function () {
+                                msNavigationServiceProvider.saveItem('adjustment', {
                                 title    : 'adjustment',
                                 state    : 'app.adjustment',
                                 weight   : 5
