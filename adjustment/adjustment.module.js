@@ -31,8 +31,7 @@
 					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
 						return $q(function(resolve, reject) {
 							$timeout(function() {
-                                debugger;
-                                if($rootScope.isSuperAdmin != 'true'){
+                                if($rootScope.isSuperAdmin == null){
                                     msNavigationServiceProvider.saveItem('adjustment', {
                                         title    : 'adjustment',
                                         state    : 'app.adjustment',
