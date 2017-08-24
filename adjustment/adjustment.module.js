@@ -31,6 +31,14 @@
 					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
 						return $q(function(resolve, reject) {
 							$timeout(function() {
+                                if($rootScope.isSuperAdmin != 'true'){
+                                    msNavigationServiceProvider.saveItem('adjustment', {
+                                        title    : 'adjustment',
+                                        state    : 'app.adjustment',
+                                        weight   : 5
+                                    });
+                                }
+
 								if ($rootScope.isBaseSet2 && $rootScope.isSuperAdmin != 'true') {
 									resolve(function () {
 										var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');
@@ -40,12 +48,6 @@
 										if(entitledStatesReturn !== true){
 											return $q.reject("unauthorized");
 										}
-
-                                        msNavigationServiceProvider.saveItem('adjustment', {
-                                            title    : 'adjustment',
-                                            state    : 'app.adjustment',
-                                            weight   : 5
-                                        });
 									});
 								} else {
 									return $location.path('/guide');
