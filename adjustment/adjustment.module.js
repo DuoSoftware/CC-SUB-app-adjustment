@@ -55,7 +55,7 @@
 			msNavigationServiceProvider.saveItem('adjustment', {
 				title    : 'adjustment',
 				state    : 'app.adjustment',
-				weight   : 5
+				weight   : 8
 			});
 
     }
