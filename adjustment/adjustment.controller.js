@@ -197,6 +197,9 @@
 
 		function getDomainExtension() {
 			var _st = gst("extension_mode");
+      if(_st=="sandbox"){
+        _st="test";
+      }
 			return (_st != null) ? _st : "test"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
 		}
 
@@ -742,6 +745,64 @@
 						return $scope.customers;
 					});
 
+          //$azureSearchHandle.getClient().SearchRequest("profile",$scope.s,t,'desc',"").onComplete(function(Response)
+          //{
+          //  if(vm.loadingProfiles)
+          //  {
+          //    for (var i = 0; i < Response.length; i++) {
+          //      if(Response[i].status==0)
+          //      {
+          //        Response[i].status=false;
+          //      }
+          //      else
+          //      {
+          //        Response[i].status=true;
+          //      }
+          //      Response[i].createddate = new Date(Response[i].createddate);
+          //      //tempList.push(data.value[i]);
+          //    }
+          //    //vm.profiles = tempList;
+          //    //skipProfileSearch += takeProfileSearch;
+          //    //$scope.loadPaging(keyword, skipProfileSearch, takeProfileSearch);
+          //    if(Response.length == 0){
+          //      $scope.isQuerySearchEmpty = true;
+          //    }
+          //    for (var i = 0; i < Response.length; i++) {
+          //
+          //      var profileId = Response[i]["profileId"];
+          //      var pro_name = "";
+          //      if (Response[i]["profile_type"] == "Business") {
+          //        pro_name = Response[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+          //
+          //      } else {
+          //        pro_name = Response[i]["first_name"] + " " + Response[i]["last_name"];
+          //      }
+          //
+          //      $scope.isCustSearchDisable = false;
+          //
+          //      if ($filter('filter')($scope.customers, {customerId: Response[i]["profileId"]})[0]) {
+          //
+          //      } else {
+          //        $scope.customers.push({customerId: profileId, customerName: pro_name});
+          //      }
+          //    }
+          //
+          //    $scope.s += t;
+          //
+          //    if($scope.s === Response.length){
+          //      $scope.querySearch(finalKeyword);
+          //    }
+          //
+          //    vm.loadingProfiles = false;
+          //  }
+          //
+          //}).onError(function(data)
+          //{
+          //  //console.log(data);
+          //  $scope.isCustSearchDisable = false;
+          //  return $scope.customers;
+          //});
+
 					//$charge.profile().filterByCatKey( $scope.s, t,'customer',query).success(function (data) {
 					//  //console.log(data);
 					// // $scope.customers = [];
@@ -792,7 +853,7 @@
 					$scope.customers = [];
 					for(var p = 0; p < $scope.initialCustomers.length;p++)
 					{
-						if($scope.initialCustomers[p].customerName.indexOf(query) !== -1)
+						if($scope.initialCustomers[p].customerName.toLowerCase().indexOf(query.toLowerCase()) !== -1)
 						{
 							if ($filter('filter')($scope.customers, {customerId: $scope.initialCustomers[p]["profileId"]})[0]) {
 
