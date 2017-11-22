@@ -192,7 +192,7 @@
 
 		function getDomainName() {
 			var _st = gst("domain");
-			return (_st != null) ? _st : ""; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
+			return (_st != null) ? _st : "gihan"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
 		}
 
 		function getDomainExtension() {
@@ -1221,62 +1221,96 @@
 			if(adjustment.invoiceid && adjustment.invoiceid != 0){
 
 				var invoiceId = adjustment.invoiceid.split(' ');
+        var invoiceNumber = parseInt(invoiceId[1]);
 
 
-				$charge.invoice().getByID(invoiceId[1]).success(function(data) {
-					$scope.SelectedInvoice=[];
+				//$charge.invoice().getByID(invoiceNumber).success(function(data) {
+				//	$scope.SelectedInvoice=[];
+                //
+				//	//console.log(data);
+				//	for(var i=0;i<data.length;i++)
+				//	{
+				//		var currencyAmount = data[i]["invoiceAmount"];
+                //
+				//		var c = $scope.baseCurrency+'_'+data[i]["currency"];
+				//		for(var iz=0;iz<$scope.AllCurrencies.length;iz++)
+				//		{
+				//			if($scope.AllCurrencies[iz][c])
+				//			{
+				//				currencyAmount = (data[i]["invoiceAmount"] * $scope.AllCurrencies[iz][c].val);
+				//				//console.log(data[i]["amount"] +"  -  "+(data[i]["amount"] * currencies[iz][c].val));
+				//			}
+                //
+				//		}
+                //
+				//		$scope.SelectedInvoice=({invoiceid : data[i]["invoiceNo"],invoiceno: $scope.prefixInvoice+' '+data[i]["invoiceNo"]
+				//			,currencyAmount: currencyAmount,invoiceAmount: data[i]["invoiceAmount"],invoiceDate: data[i]["invoiceDate"],invoiceStatus: data[i]["invoiceStatus"]
+				//			,currency: data[i]["currency"],invoiceType: data[i]["invoiceType"],paidAmount: data[i]["paidAmount"],subTotal: data[i]["subTotal"]});
+                //
+                //
+                //
+				//	}
+                //
+				//	// var elem = document.getElementById('print-content');
+				//	// if(elem != undefined && !$scope.isTemplateLoaded && $scope.SelectedInvoice.length != 0){
+				//	// 	$http({
+				//	// 		method: 'GET',
+				//	// 		url: $scope.emailTemplateMarkupURL
+				//	// 	}).then(function (response) {
+				//	// 		emailTemplateMarkup = response.data;
+				//	// 		vm.adjustmentViewExtraction(function (processedMkup) {
+				//	// 			elem.innerHTML = processedMkup;
+				//	// 		});
+				//	// 		$scope.isReadLoaded = true;
+				//	// 		$scope.isTemplateLoaded = true;
+				//	// 	}, function () {
+				//	// 	});
+				//	// }else{
+				//	// 	vm.adjustmentViewExtraction(function (processedMkup) {
+				//	// 		elem.innerHTML = processedMkup;
+				//	// 	});
+				//	// 	$scope.isReadLoaded = true;
+				//	// 	$scope.isTemplateLoaded = true;
+				//	// };
+                //
+				//	$scope.isReadLoaded = true;
+				//}).error(function(data) {
+				//	$scope.isReadLoaded = true;
+				//	//console.log(data);
+				//})
 
-					//console.log(data);
-					for(var i=0;i<data.length;i++)
-					{
-						var currencyAmount = data[i]["invoiceAmount"];
+        $charge.invoicing().retrieveInvoiceById(invoiceNumber).success(function(data) {
+          $scope.SelectedInvoice=[];
 
-						var c = $scope.baseCurrency+'_'+data[i]["currency"];
-						for(var iz=0;iz<$scope.AllCurrencies.length;iz++)
-						{
-							if($scope.AllCurrencies[iz][c])
-							{
-								currencyAmount = (data[i]["invoiceAmount"] * $scope.AllCurrencies[iz][c].val);
-								//console.log(data[i]["amount"] +"  -  "+(data[i]["amount"] * currencies[iz][c].val));
-							}
+          //console.log(data);
+          for(var i=0;i<data.data.result.length;i++)
+          {
+            var currencyAmount = data.data.result[i]["invoiceAmount"];
 
-						}
+            var c = $scope.baseCurrency+'_'+data.data.result[i]["currency"];
+            for(var iz=0;iz<$scope.AllCurrencies.length;iz++)
+            {
+              if($scope.AllCurrencies[iz][c])
+              {
+                currencyAmount = (data.data.result[i]["invoiceAmount"] * $scope.AllCurrencies[iz][c].val);
+                //console.log(data[i]["amount"] +"  -  "+(data[i]["amount"] * currencies[iz][c].val));
+              }
 
-						$scope.SelectedInvoice=({invoiceid : data[i]["invoiceNo"],invoiceno: $scope.prefixInvoice+' '+data[i]["invoiceNo"]
-							,currencyAmount: currencyAmount,invoiceAmount: data[i]["invoiceAmount"],invoiceDate: data[i]["invoiceDate"],invoiceStatus: data[i]["invoiceStatus"]
-							,currency: data[i]["currency"],invoiceType: data[i]["invoiceType"],paidAmount: data[i]["paidAmount"],subTotal: data[i]["subTotal"]});
+            }
+
+            $scope.SelectedInvoice=({invoiceid : data.data.result[i]["invoiceNo"],invoiceno: $scope.prefixInvoice+' '+data.data.result[i]["invoiceNo"]
+              ,currencyAmount: currencyAmount,invoiceAmount: data.data.result[i]["invoiceAmount"],invoiceDate: data.data.result[i]["invoiceDate"],invoiceStatus: data.data.result[i]["invoiceStatus"]
+              ,currency: data.data.result[i]["currency"],invoiceType: data.data.result[i]["invoiceType"],paidAmount: data.data.result[i]["paidAmount"],subTotal: data.data.result[i]["subTotal"]});
 
 
 
-					}
+          }
 
-					// var elem = document.getElementById('print-content');
-					// if(elem != undefined && !$scope.isTemplateLoaded && $scope.SelectedInvoice.length != 0){
-					// 	$http({
-					// 		method: 'GET',
-					// 		url: $scope.emailTemplateMarkupURL
-					// 	}).then(function (response) {
-					// 		emailTemplateMarkup = response.data;
-					// 		vm.adjustmentViewExtraction(function (processedMkup) {
-					// 			elem.innerHTML = processedMkup;
-					// 		});
-					// 		$scope.isReadLoaded = true;
-					// 		$scope.isTemplateLoaded = true;
-					// 	}, function () {
-					// 	});
-					// }else{
-					// 	vm.adjustmentViewExtraction(function (processedMkup) {
-					// 		elem.innerHTML = processedMkup;
-					// 	});
-					// 	$scope.isReadLoaded = true;
-					// 	$scope.isTemplateLoaded = true;
-					// };
-
-					$scope.isReadLoaded = true;
-				}).error(function(data) {
-					$scope.isReadLoaded = true;
-					//console.log(data);
-				})
+          $scope.isReadLoaded = true;
+        }).error(function(data) {
+          $scope.isReadLoaded = true;
+          //console.log(data);
+        })
 
 
 				$scope.customerAddress = $scope.customerPhone =  $scope.customerEmail = '';

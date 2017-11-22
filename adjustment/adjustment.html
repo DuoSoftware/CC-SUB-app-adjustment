@@ -464,8 +464,8 @@
                                     <div style="width: 50%;height: 10px;float: left;"></div>
                                     <div style="width: 50%;float: left;padding: 5px 0">
                                         <div style="color: #aaaaaa;font-size: 16px;width: 50%;float: left;">TOTAL</div>
-                                        <div style="color: #aaaaaa;text-align: right;width: 50%;float: left;" ng-if="vm.selectedAdjustment.adjustmenttype != 'Debit'">{{vm.selectedAdjustment.amount| isoCurrency:vm.selectedAdjustment.currency :decimalPoint}}</div>
-                                        <div style="color: #aaaaaa;text-align: right;width: 50%;float: left;" ng-if="vm.selectedAdjustment.adjustmenttype === 'Debit'">{{vm.selectedAdjustment.amount| isoCurrency:vm.selectedAdjustment.currency :decimalPoint}}</div>
+                                        <div style="color: #aaaaaa;text-align: right;width: 50%;float: left;" ng-if="vm.selectedAdjustment.adjustmenttype != 'Debit'">{{vm.selectedAdjustment.amount| isoCurrency:vm.selectedAdjustment.currency }}</div>
+                                        <div style="color: #aaaaaa;text-align: right;width: 50%;float: left;" ng-if="vm.selectedAdjustment.adjustmenttype === 'Debit'">{{vm.selectedAdjustment.amount| isoCurrency:vm.selectedAdjustment.currency}}</div>
                                     </div>
                                 </div>
                             </div>

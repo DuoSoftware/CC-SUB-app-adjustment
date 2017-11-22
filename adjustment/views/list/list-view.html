@@ -28,7 +28,7 @@
         </div>
 
         <div flex layout="column" layout-align="center end" ng-if="!showInpageReadpane">
-            <span flex class="pr-40">{{adjustment.amount | isoCurrency:adjustment.currency :decimalPoint}}</span>
+            <span flex class="pr-40">{{adjustment.amount | isoCurrency:adjustment.currency }}</span>
         </div>
 
         <!--<div class="status" layout="column" layout-align="center start" ng-class="{'flex-30':showInpageReadpane == true,'flex-10': showInpageReadpane == false}">-->
