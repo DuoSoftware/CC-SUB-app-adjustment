@@ -197,7 +197,7 @@
 
 		function getDomainExtension() {
 			var _st = gst("extension_mode");
-      if(_st=="sandbox"){
+      if(_st=="ssandbox"){
         _st="test";
       }
 			return (_st != null) ? _st : "test"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
