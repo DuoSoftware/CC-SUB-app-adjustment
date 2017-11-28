@@ -191,8 +191,9 @@
 		}
 
 		function getDomainName() {
-			var _st = gst("domain");
-			return (_st != null) ? _st : "gihan"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
+      var _st = gst("currentDomain");
+			var __st = gst("domain");
+			return (_st != null) ? _st : __st; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
 		}
 
 		function getDomainExtension() {
