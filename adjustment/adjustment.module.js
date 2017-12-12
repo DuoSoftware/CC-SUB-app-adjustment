@@ -1,8 +1,8 @@
 ////////////////////////////////
 // App : Adjustment
 // Owner  : Ishara Gunathilaka
-// Last changed date : 2017/07/25
-// Version : 6.1.0.4
+// Last changed date : 2017/11/30
+// Version : 6.1.0.7
 // Modified By : Kasun
 /////////////////////////////////
 
@@ -31,6 +31,7 @@
 					security: ['$q','mesentitlement','$timeout','$rootScope','$state','$location', function($q,mesentitlement,$timeout,$rootScope,$state, $location){
 						return $q(function(resolve, reject) {
 							$timeout(function() {
+								//if (true) {
 								if ($rootScope.isBaseSet2) {
 									resolve(function () {
 										var entitledStatesReturn = mesentitlement.stateDepResolver('adjustment');

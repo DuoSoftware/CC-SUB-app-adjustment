@@ -191,12 +191,16 @@
 		}
 
 		function getDomainName() {
-			var _st = gst("domain");
-			return (_st != null) ? _st : ""; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
+      var _st = gst("currentDomain");
+			var __st = gst("domain");
+			return (_st != null) ? _st : __st; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
 		}
 
 		function getDomainExtension() {
 			var _st = gst("extension_mode");
+      if(_st=="ssandbox"){
+        _st="test";
+      }
 			return (_st != null) ? _st : "test"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
 		}
 
@@ -742,6 +746,64 @@
 						return $scope.customers;
 					});
 
+          //$azureSearchHandle.getClient().SearchRequest("profile",$scope.s,t,'desc',"").onComplete(function(Response)
+          //{
+          //  if(vm.loadingProfiles)
+          //  {
+          //    for (var i = 0; i < Response.length; i++) {
+          //      if(Response[i].status==0)
+          //      {
+          //        Response[i].status=false;
+          //      }
+          //      else
+          //      {
+          //        Response[i].status=true;
+          //      }
+          //      Response[i].createddate = new Date(Response[i].createddate);
+          //      //tempList.push(data.value[i]);
+          //    }
+          //    //vm.profiles = tempList;
+          //    //skipProfileSearch += takeProfileSearch;
+          //    //$scope.loadPaging(keyword, skipProfileSearch, takeProfileSearch);
+          //    if(Response.length == 0){
+          //      $scope.isQuerySearchEmpty = true;
+          //    }
+          //    for (var i = 0; i < Response.length; i++) {
+          //
+          //      var profileId = Response[i]["profileId"];
+          //      var pro_name = "";
+          //      if (Response[i]["profile_type"] == "Business") {
+          //        pro_name = Response[i]["business_name"]; // data[i]["business_contact_name"]+" "+
+          //
+          //      } else {
+          //        pro_name = Response[i]["first_name"] + " " + Response[i]["last_name"];
+          //      }
+          //
+          //      $scope.isCustSearchDisable = false;
+          //
+          //      if ($filter('filter')($scope.customers, {customerId: Response[i]["profileId"]})[0]) {
+          //
+          //      } else {
+          //        $scope.customers.push({customerId: profileId, customerName: pro_name});
+          //      }
+          //    }
+          //
+          //    $scope.s += t;
+          //
+          //    if($scope.s === Response.length){
+          //      $scope.querySearch(finalKeyword);
+          //    }
+          //
+          //    vm.loadingProfiles = false;
+          //  }
+          //
+          //}).onError(function(data)
+          //{
+          //  //console.log(data);
+          //  $scope.isCustSearchDisable = false;
+          //  return $scope.customers;
+          //});
+
 					//$charge.profile().filterByCatKey( $scope.s, t,'customer',query).success(function (data) {
 					//  //console.log(data);
 					// // $scope.customers = [];
@@ -792,7 +854,7 @@
 					$scope.customers = [];
 					for(var p = 0; p < $scope.initialCustomers.length;p++)
 					{
-						if($scope.initialCustomers[p].customerName.indexOf(query) !== -1)
+						if($scope.initialCustomers[p].customerName.toLowerCase().indexOf(query.toLowerCase()) !== -1)
 						{
 							if ($filter('filter')($scope.customers, {customerId: $scope.initialCustomers[p]["profileId"]})[0]) {
 
@@ -1160,62 +1222,96 @@
 			if(adjustment.invoiceid && adjustment.invoiceid != 0){
 
 				var invoiceId = adjustment.invoiceid.split(' ');
+        var invoiceNumber = parseInt(invoiceId[1]);
 
 
-				$charge.invoice().getByID(invoiceId[1]).success(function(data) {
-					$scope.SelectedInvoice=[];
+				//$charge.invoice().getByID(invoiceNumber).success(function(data) {
+				//	$scope.SelectedInvoice=[];
+                //
+				//	//console.log(data);
+				//	for(var i=0;i<data.length;i++)
+				//	{
+				//		var currencyAmount = data[i]["invoiceAmount"];
+                //
+				//		var c = $scope.baseCurrency+'_'+data[i]["currency"];
+				//		for(var iz=0;iz<$scope.AllCurrencies.length;iz++)
+				//		{
+				//			if($scope.AllCurrencies[iz][c])
+				//			{
+				//				currencyAmount = (data[i]["invoiceAmount"] * $scope.AllCurrencies[iz][c].val);
+				//				//console.log(data[i]["amount"] +"  -  "+(data[i]["amount"] * currencies[iz][c].val));
+				//			}
+                //
+				//		}
+                //
+				//		$scope.SelectedInvoice=({invoiceid : data[i]["invoiceNo"],invoiceno: $scope.prefixInvoice+' '+data[i]["invoiceNo"]
+				//			,currencyAmount: currencyAmount,invoiceAmount: data[i]["invoiceAmount"],invoiceDate: data[i]["invoiceDate"],invoiceStatus: data[i]["invoiceStatus"]
+				//			,currency: data[i]["currency"],invoiceType: data[i]["invoiceType"],paidAmount: data[i]["paidAmount"],subTotal: data[i]["subTotal"]});
+                //
+                //
+                //
+				//	}
+                //
+				//	// var elem = document.getElementById('print-content');
+				//	// if(elem != undefined && !$scope.isTemplateLoaded && $scope.SelectedInvoice.length != 0){
+				//	// 	$http({
+				//	// 		method: 'GET',
+				//	// 		url: $scope.emailTemplateMarkupURL
+				//	// 	}).then(function (response) {
+				//	// 		emailTemplateMarkup = response.data;
+				//	// 		vm.adjustmentViewExtraction(function (processedMkup) {
+				//	// 			elem.innerHTML = processedMkup;
+				//	// 		});
+				//	// 		$scope.isReadLoaded = true;
+				//	// 		$scope.isTemplateLoaded = true;
+				//	// 	}, function () {
+				//	// 	});
+				//	// }else{
+				//	// 	vm.adjustmentViewExtraction(function (processedMkup) {
+				//	// 		elem.innerHTML = processedMkup;
+				//	// 	});
+				//	// 	$scope.isReadLoaded = true;
+				//	// 	$scope.isTemplateLoaded = true;
+				//	// };
+                //
+				//	$scope.isReadLoaded = true;
+				//}).error(function(data) {
+				//	$scope.isReadLoaded = true;
+				//	//console.log(data);
+				//})
 
-					//console.log(data);
-					for(var i=0;i<data.length;i++)
-					{
-						var currencyAmount = data[i]["invoiceAmount"];
+        $charge.invoicing().retrieveInvoiceById(invoiceNumber).success(function(data) {
+          $scope.SelectedInvoice=[];
 
-						var c = $scope.baseCurrency+'_'+data[i]["currency"];
-						for(var iz=0;iz<$scope.AllCurrencies.length;iz++)
-						{
-							if($scope.AllCurrencies[iz][c])
-							{
-								currencyAmount = (data[i]["invoiceAmount"] * $scope.AllCurrencies[iz][c].val);
-								//console.log(data[i]["amount"] +"  -  "+(data[i]["amount"] * currencies[iz][c].val));
-							}
+          //console.log(data);
+          for(var i=0;i<data.data.result.length;i++)
+          {
+            var currencyAmount = data.data.result[i]["invoiceAmount"];
 
-						}
+            var c = $scope.baseCurrency+'_'+data.data.result[i]["currency"];
+            for(var iz=0;iz<$scope.AllCurrencies.length;iz++)
+            {
+              if($scope.AllCurrencies[iz][c])
+              {
+                currencyAmount = (data.data.result[i]["invoiceAmount"] * $scope.AllCurrencies[iz][c].val);
+                //console.log(data[i]["amount"] +"  -  "+(data[i]["amount"] * currencies[iz][c].val));
+              }
 
-						$scope.SelectedInvoice=({invoiceid : data[i]["invoiceNo"],invoiceno: $scope.prefixInvoice+' '+data[i]["invoiceNo"]
-							,currencyAmount: currencyAmount,invoiceAmount: data[i]["invoiceAmount"],invoiceDate: data[i]["invoiceDate"],invoiceStatus: data[i]["invoiceStatus"]
-							,currency: data[i]["currency"],invoiceType: data[i]["invoiceType"],paidAmount: data[i]["paidAmount"],subTotal: data[i]["subTotal"]});
+            }
+
+            $scope.SelectedInvoice=({invoiceid : data.data.result[i]["invoiceNo"],invoiceno: $scope.prefixInvoice+' '+data.data.result[i]["invoiceNo"]
+              ,currencyAmount: currencyAmount,invoiceAmount: data.data.result[i]["invoiceAmount"],invoiceDate: data.data.result[i]["invoiceDate"],invoiceStatus: data.data.result[i]["invoiceStatus"]
+              ,currency: data.data.result[i]["currency"],invoiceType: data.data.result[i]["invoiceType"],paidAmount: data.data.result[i]["paidAmount"],subTotal: data.data.result[i]["subTotal"]});
 
 
 
-					}
+          }
 
-					// var elem = document.getElementById('print-content');
-					// if(elem != undefined && !$scope.isTemplateLoaded && $scope.SelectedInvoice.length != 0){
-					// 	$http({
-					// 		method: 'GET',
-					// 		url: $scope.emailTemplateMarkupURL
-					// 	}).then(function (response) {
-					// 		emailTemplateMarkup = response.data;
-					// 		vm.adjustmentViewExtraction(function (processedMkup) {
-					// 			elem.innerHTML = processedMkup;
-					// 		});
-					// 		$scope.isReadLoaded = true;
-					// 		$scope.isTemplateLoaded = true;
-					// 	}, function () {
-					// 	});
-					// }else{
-					// 	vm.adjustmentViewExtraction(function (processedMkup) {
-					// 		elem.innerHTML = processedMkup;
-					// 	});
-					// 	$scope.isReadLoaded = true;
-					// 	$scope.isTemplateLoaded = true;
-					// };
-
-					$scope.isReadLoaded = true;
-				}).error(function(data) {
-					$scope.isReadLoaded = true;
-					//console.log(data);
-				})
+          $scope.isReadLoaded = true;
+        }).error(function(data) {
+          $scope.isReadLoaded = true;
+          //console.log(data);
+        })
 
 
 				$scope.customerAddress = $scope.customerPhone =  $scope.customerEmail = '';

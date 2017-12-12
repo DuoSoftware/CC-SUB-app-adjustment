@@ -1,6 +1,13 @@
 <!-- PRODUCT LIST ITEMS -->
-<div class="main-list-preloader animate-fade-in-out" layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.listLoaded">
+<div class="main-list-preloader animate-fade-in-out" layout="row" layout-sm="column" layout-align="space-around" ng-if="!vm.listLoaded">
     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+
+<div class="main-empty-list" ng-if="vm.adjustments.length == 0 && vm.listLoaded">
+    <div>
+        <img src="assets/images/empty-list.gif" alt="Nothing to show">
+        <h2>Nothing to Show</h2>
+    </div>
 </div>
 
 <!-- INVOICE LIST ITEMS -->
@@ -28,7 +35,7 @@
         </div>
 
         <div flex layout="column" layout-align="center end" ng-if="!showInpageReadpane">
-            <span flex class="pr-40">{{adjustment.amount | isoCurrency:adjustment.currency :decimalPoint}}</span>
+            <span flex class="pr-40">{{adjustment.amount | isoCurrency:adjustment.currency }}</span>
         </div>
 
         <!--<div class="status" layout="column" layout-align="center start" ng-class="{'flex-30':showInpageReadpane == true,'flex-10': showInpageReadpane == false}">-->
