@@ -1,0 +1,494 @@
+<div id="adjustment" class="page-layout carded left-sidenav" layout="row" ng-switch="vm.appInnerState">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg md-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!--&lt;!&ndash; SIDENAV &ndash;&gt;-->
+    <!--<md-sidenav class="sidenav" md-is-locked-open="$mdMedia('gt-md')" md-component-id="main-sidenav"-->
+
+    <!--ng-include="'app/main/adjustment/sidenavs/main/main-sidenav.html'" ms-scroll ms-sidenav-helper>-->
+    <!--</md-sidenav>-->
+    <!--&lt;!&ndash; / SIDENAV &ndash;&gt;-->
+
+    <!-- CENTER -->
+    <div ng-switch-when="default" class="center" layout="column" flex>
+        <!-- CONTENT HEADER- V NAV-->
+        <div layout="column" layout-align="start start">
+            <div class="v-header" layout="column" flex fill-width>
+                <div class="title" layout="column" layout-align="center start">
+                    <div class="logo" layout="row" layout-align="start center">
+                        <span class="logo-icon">
+                          <img src="app/core/app_icons/adjustment_app_icon.png" alt=""/>
+                        </span>
+                        <span class="logo-text">Adjustments</span>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div class="search-wrapper md-whiteframe-4dp" layout="row" layout-align="start center" flex ng-class="{'op-5':vm.activeAdjustmentPaneIndex == 1}">
+                        <md-button class="md-icon-button sidenav-toggle" ng-click="vm.toggleSidenav('main-sidenav')" hide-gt-md aria-label="Toggle Sidenav">
+                            <md-icon class="icon" md-font-icon="icon-menu"></md-icon>
+                        </md-button>
+
+                        <div class="search" flex layout="row" layout-align="start center">
+                            <md-icon md-font-icon="icon-magnify" class="icon s24"></md-icon>
+                            <input ng-disabled="vm.activeAdjustmentPaneIndex == 1" flex ng-model="vm.search" type="text" ng-change="searchAdjustmentByKeyWord(vm.search)" placeholder="Search for coupons">
+                        </div>
+                    </div>
+                    <md-button class="md-raised md-accent main-app-create" layout="row" layout-align="center center" aria-label="compose" ng-disabled="vm.activeAdjustmentPaneIndex == 1" ng-click="vm.addAdjustmentDialog('open')" ng-if="!inpageReadPaneEdit"><span class="fs-18 mr-10">+</span> NEW
+                    </md-button>
+                </div>
+            </div>
+            <!--<div class="v-nav">-->
+            <!--<div ng-include="'app/main/plans/sidenavs/main/main-sidenav.html'"></div>-->
+            <!--</div>-->
+
+        </div>
+        <!-- / CONTENT HEADER -->
+        <!--&lt;!&ndash; CONTENT HEADER &ndash;&gt;-->
+        <!--<div class="header" layout="row" layout-align="start center" ng-if="vm.activeAdjustmentPaneIndex === 0">-->
+
+        <!--<div class="search-wrapper md-whiteframe-4dp" layout="row" layout-align="start center" flex>-->
+        <!--<md-button class="md-icon-button sidenav-toggle" ng-click="vm.toggleSidenav('main-sidenav')" hide-gt-md-->
+        <!--aria-label="Toggle Sidenav">-->
+        <!--<md-icon class="icon" md-font-icon="icon-menu"></md-icon>-->
+        <!--</md-button>-->
+
+        <!--<div class="search" flex layout="row" layout-align="start center">-->
+        <!--<md-icon md-font-icon="icon-magnify" class="icon s24"></md-icon>-->
+        <!--<input flex ng-model="vm.search" type="text" ng-change="searchAdjustmentByKeyWord(vm.search)" placeholder="Search for Adjustments">-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--</div>-->
+        <!--&lt;!&ndash; / CONTENT HEADER &ndash;&gt;-->
+
+        <div layout="row" flex>
+            <!-- CONTENT CARD -->
+            <div class="content-card" layout="column" ng-class="{'flex-30':showInpageReadpane}" flex>
+
+                <!-- PRODUCT VIEW PANE TOOLBAR -->
+                <!--<div class="toolbar" layout="row" layout-align="space-between center" ng-if="vm.activeAdjustmentPaneIndex === 1">-->
+                <!--<md-button class="md-icon-button"-->
+                <!--ng-click="vm.closeReadPane()"-->
+                <!--aria-label="Back">-->
+                <!--<md-icon md-font-icon="icon-keyboard-backspace"></md-icon>-->
+                <!--</md-button>-->
+                <!--</div>-->
+                <div class="toolbar list-header" layout="row" layout-align="space-between center" ng-if="vm.activeAdjustmentPaneIndex === 0">
+                    <div ng-include="'app/main/adjustment/views/list/list-header.html'" layout="row" flex layout-align="start center"></div>
+                </div>
+                <div class="toolbar" layout="row" layout-align="end center" ng-if="vm.activeAdjustmentPaneIndex === 1">
+                    <md-button class="md-icon-button" style="margin-right: -10px"
+                               ng-click="vm.addAdjustmentDialog('close')"
+                               aria-label="Back">
+                        <md-icon md-font-icon="icon-close"></md-icon>
+                    </md-button>
+                </div>
+                <!-- / PRODUCT VIEW PANE TOOLBAR -->
+
+                <!-- CONTENT TOOLBAR -->
+                <!--<div class="toolbar list-header" layout="row" layout-align="space-between center" ng-if="vm.activeAdjustmentPaneIndex === 0">-->
+                <!--<div layout="row" flex layout-align="start center" style="padding-left: 0px;">-->
+                <!--<div class="info" flex layout="row" style="height: 40px">-->
+
+                <!--&lt;!&ndash;<div class="prodMainInfo" layout="column" layout-align="center start" style="width: 190px;">&ndash;&gt;-->
+                <!--<div class="productName" layout="column" layout-align="center start" flex>-->
+                <!--<div layout="row">-->
+                <!--<span layout="column" layout-align="center center">Adjustment ID</span>-->
+                <!--<div layout="column" layout="center center">-->
+                <!--<md-button ng-hide="showId" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('customer',true,'ID')">-->
+                <!--<md-icon class="sort_btn_icon merged" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--<md-button ng-show="showId" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('customer',null,'ID')">-->
+                <!--<md-icon ng-if="reverse==true" class="sort_btn_icon" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon ng-if="reverse==false" md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="productName" layout="column" layout-align="center start" flex>-->
+                <!--<div layout="row">-->
+                <!--<span layout="column" layout-align="center center">Created Date</span>-->
+                <!--<div layout="column" layout="center center">-->
+                <!--<md-button ng-hide="showDate" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('createdDate',true,'Date')">-->
+                <!--<md-icon class="sort_btn_icon merged" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--<md-button ng-show="showDate" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('createdDate',null,'Date')">-->
+                <!--<md-icon ng-if="reverse==true" class="sort_btn_icon" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon ng-if="reverse==false" md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="productName" layout="column" layout-align="center start" flex>-->
+                <!--<div layout="row">-->
+                <!--<span layout="column" layout-align="center center">Adjustment Type</span>-->
+                <!--<div layout="column" layout="center center">-->
+                <!--<md-button ng-hide="showType" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('adjustmenttype',true,'Type')">-->
+                <!--<md-icon class="sort_btn_icon merged" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--<md-button ng-show="showType" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('adjustmenttype',null,'Type')">-->
+                <!--<md-icon ng-if="reverse==true" class="sort_btn_icon" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon ng-if="reverse==false" md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="productName" layout="column" layout-align="center end" flex="10">-->
+                <!--<div layout="row">-->
+                <!--<span layout="column" layout-align="center center">Amount</span>-->
+                <!--<div layout="column" layout="center center" style="margin-right: -13px">-->
+                <!--<md-button ng-hide="showAmt" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('amount',true,'Amt')">-->
+                <!--<md-icon class="sort_btn_icon merged" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--<md-button ng-show="showAmt" class="sort_btn md-icon-button" layout="column" layout="center center" ng-click="sortBy('amount',null,'Amt')">-->
+                <!--<md-icon ng-if="reverse==true" class="sort_btn_icon" md-font-icon="icon-chevron-up"></md-icon>-->
+                <!--<md-icon ng-if="reverse==false" md-font-icon="icon-chevron-down"></md-icon>-->
+                <!--</md-button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+
+
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!-- / CONTENT TOOLBAR -->
+
+                <!-- CONTENT WRAPPER -->
+                <div class="content-wrapper" layout="row" flex>
+
+                    <md-tabs md-selected="vm.activeAdjustmentPaneIndex" class="content-tabs" md-dynamic-height="{{vm.dynamicHeight}}"
+                             flex>
+                        <md-tab>
+                            <md-tab-label>Adjustment List Pane</md-tab-label>
+                            <md-tab-body>
+                                <!-- PRODUCT LIST PANE -->
+                                <div class="preloader" layout="row" layout-sm="column" layout-align="space-around" ng-hide="vm.listLoaded">
+                                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                                </div>
+                                <div class="content main-list-pane"
+                                     ng-include="'app/main/adjustment/views/list/list-view.html'" ms-scroll>
+                                </div>
+                                <!-- / PRODUCT LIST PANE -->
+                            </md-tab-body>
+                        </md-tab>
+
+                        <md-tab>
+                            <md-tab-label>Adjustment Display Pane</md-tab-label>
+                            <md-tab-body >
+                                <!-- PRODUCT DISPLAY PANE -->
+                                <div class="content adjustment-display-pane mb-50"
+                                     ng-include="'app/main/adjustment/views/read/read-view.html'" ms-scroll>
+                                </div>
+                                <div layout="row" layout-align="end center" md-whiteframe="8dp" class="bottom-fixed-bar fixed">
+                                    <md-progress-circular class="gen-save-indicator" ng-if="isSaveClicked"></md-progress-circular>
+                                    <md-button ng-click="clearForm()">Clear</md-button>
+                                    <md-button ng-disabled="isSaveClicked" type="submit" form="adjustmentForm" class="md-raised md-accent">SAVE</md-button>
+                                </div>
+                                <!-- / PRODUCT DISPLAY PANE -->
+                            </md-tab-body>
+                        </md-tab>
+                    </md-tabs>
+
+                </div>
+                <!-- / CONTENT WRAPPER -->
+
+            </div>
+            <!-- / CONTENT CARD -->
+
+            <!--INPAGE READ PANE-->
+            <div flex class="inpage-readpane" layout="column" md-whiteframe="4dp" ng-if="showInpageReadpane">
+                <div layout="row" layout-align="space-between center" class="inpage-readpane-toolbar">
+                    <h3 class="group-sub-head" layout="row" layout-align="start center">Invoice info</h3>
+                    <div layout="row">
+                        <md-menu>
+                            <md-button aria-label="More" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                <md-icon md-font-icon="icon-menu"></md-icon>
+                                <md-tooltip>Invoice action</md-tooltip>
+                            </md-button>
+
+                            <md-menu-content width="3">
+                                <md-menu-item>
+                                    <md-button aria-label="Send Mail" ng-click="emailInvoice($event,'print-content')">
+                                        <md-icon md-font-icon="icon-email"></md-icon>
+                                        <span>Email</span>
+                                    </md-button>
+                                </md-menu-item>
+
+                                <md-menu-item>
+                                    <md-button aria-label="Save to PDF" ng-click="printDiv('print-content')">
+                                        <md-icon md-font-icon="icon-printer"></md-icon>
+                                        <span>Print</span>
+                                    </md-button>
+                                </md-menu-item>
+
+                            </md-menu-content>
+                        </md-menu>
+                        <md-button class="md-icon-button" ng-click="vm.closeInfoPane()">
+                            <md-icon md-font-icon="icon-close"></md-icon>
+                            <md-tooltip>Close</md-tooltip>
+                        </md-button>
+                    </div>
+                </div>
+                <div class="preloader animate-fade-in-out" ng-if="!isReadLoaded" style="top: 35px;">
+                    <md-progress-circular></md-progress-circular>
+                </div>
+                <md-content flex ms-scroll layout="column" layout-align="start center" class="inpage-readpane-body" ng-if="!inpageReadPaneEdit">
+                    <!--<div layout="row" layout-align="space-between center">-->
+                    <!--<div layout="row" layout-align="start center">-->
+                    <!--<div layout="column" layout-align="center start">-->
+                    <!--<div class="fs-20 font-accent fw-400">{{vm.selectedPlan.code}}</div>-->
+                    <!--<div layout="row" class="op-5">-->
+                    <!--<span>by {{vm.selectedPlan.createdUser}}</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="ml-20">-->
+                    <!--<span class="pill" layout="row" layout-align="center center" ng-class="{'negative':vm.selectedPlan.status==='Inactive','positive':vm.selectedPlan.status==='Active'}">{{vm.selectedPlan.status}}</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<md-button ng-click="getEmbededPlanForm(vm.selectedPlan)" class="embed-btn md-raised font-accent h-30 lh-32" layout="row" layout-align="center center">Embed <md-icon md-font-icon="icon-share" class="fs-20 font-accent w-20 h-20 m-0 lh-18"></md-icon><md-tooltip>Get embeddable form</md-tooltip></md-button>-->
+                    <!--</div>-->
+                    <!--<md-divider class="mt-10 mb-20"></md-divider>-->
+                    <!-- INVOICE -->
+                    <div class="email-template" style="box-shadow:none!important;float:none;width: 100%;max-width: 700px;min-height: 800px;position:relative">
+                        <div class="state-flag-wrap">
+                            <md-icon md-font-icon="icon-bookmark {{SelectedInvoice.invoiceStatus | lowercase}}"></md-icon>
+                            <span class="state-flag-text {{SelectedInvoice.invoiceStatus | lowercase}}">{{SelectedInvoice.invoiceStatus}}</span>
+                        </div>
+                        <div id="print-content" style="border: solid 1px #ddd;min-height: 800px;position:relative;">
+                            <div ng-if="currentTemplateView == 'emailTemplate1'">
+                                <div class="template-header bg-blue-g" style="height: 100px;background: #05a3ec;background:linear-gradient(45deg, #05a3ec,#006696);color: #fff;padding: 10px;">
+                                    <div class="left-content" style="width: 30%;float: left;">
+                                        <div style="font-size: 30px;margin: 20px 0;">ADJUSTMENT</div>
+                                    </div>
+                                    <div class="right-content" style="width: 70%;float: right;">
+                                        <div class="inner-left" style="width: 35%;float: left;">
+                                        </div>
+                                        <div class="inner-right" style="width: 65%;float: right">
+                                            <div><h3 style="margin: 0;">{{compinfo.companyName}}</h3></div>
+                                            <div>{{compinfo.companyAddress}}</div>
+                                            <div>{{compinfo.companyPhone}}</div>
+                                            <div>{{compinfo.companyEmail}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sub-header" style="padding: 10px;padding-top: 30px;overflow: hidden;">
+                                    <div class="left-content" style="width: 55%;float: left;">
+                                        <div style="color: #aaa;margin-bottom: 5px">Billed to</div>
+                                        <div style="margin-bottom: 5px">{{vm.selectedAdjustment.customer}}</div>
+                                        <div style="margin-bottom: 5px">{{customerAddress}}</div>
+                                        <div style="margin-bottom: 5px">{{customerPhone}}</div>
+                                        <div>{{customerEmail}}</div>
+                                    </div>
+                                    <div class="right-content" style="width: 45%;float: right;">
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div style="display:inline-block;width: 100px;color: #aaa;margin-bottom: 2px">Adjustment no</div>
+                                            <div style="display:inline-block;">{{vm.selectedAdjustment.guadjustmentid}}</div>
+                                        </div>
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div style="display:inline-block;width: 100px;color: #aaa;margin-bottom: 2px">Adjustment type</div>
+                                            <div style="display:inline-block;">{{SelectedInvoice.invoiceType}}</div>
+                                        </div>
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div style="display:inline-block;width: 100px;color: #aaa;margin-bottom: 2px">Created date</div>
+                                            <div style="display:inline-block;">{{SelectedInvoice.invoiceDate | parseDate | date: 'dd/MM/yyyy'}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="currentTemplateView == 'emailTemplate2'">
+                                <div class="template-header bg-image" style="height: 110px;background: url('../../../../assets/images/backgrounds/email_template_1.jpg') -30px;background-repeat:no-repeat;background-size:cover;color: #fff;padding: 10px;">
+                                    <div class="left-content" style="width: 30%;float: left;">
+                                        <div style="font-size: 30px;margin: 20px 0;">ADJUSTMENT</div>
+                                    </div>
+                                    <div class="right-content" style="width: 70%;float: right;">
+                                        <div class="inner-left" style="width: 35%;float: left;">
+                                        </div>
+                                        <div class="inner-right" style="width: 65%;float: right;">
+                                            <div><h3 style="margin: 0;">{{compinfo.companyName}}</h3></div>
+                                            <div>{{compinfo.companyAddress}}</div>
+                                            <div>{{compinfo.companyPhone}}</div>
+                                            <div>{{compinfo.companyEmail}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sub-header" style="padding: 10px;padding-top: 30px;overflow: hidden;">
+                                    <div class="left-content" style="width: 55%;float: left;padding-right: 30px;">
+                                        <div style="color: #aaa;margin-bottom: 5px">Billed to</div>
+                                        <div style="margin-bottom: 5px;text-transform: capitalize">{{vm.selectedAdjustment.customer}}</div>
+                                        <div style="margin-bottom: 5px">{{customerAddress}}</div>
+                                        <div style="margin-bottom: 5px">{{customerPhone}}</div>
+                                        <div>{{customerEmail}}</div>
+                                    </div>
+                                    <div class="right-content" style="width: 45%;float: right;">
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div style="display:inline-block;width: 100px;color: #aaa;margin-bottom: 2px">Adjustment no</div>
+                                            <div style="display:inline-block;">{{vm.selectedAdjustment.guadjustmentid}}</div>
+                                        </div>
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div style="display:inline-block;width: 100px;color: #aaa;margin-bottom: 2px">Adjustment type</div>
+                                            <div style="display:inline-block;">{{SelectedInvoice.invoiceType}}</div>
+                                        </div>
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div style="display:inline-block;width: 100px;color: #aaa;margin-bottom: 2px">Created date</div>
+                                            <div style="display:inline-block;">{{SelectedInvoice.invoiceDate | parseDate | date: 'dd/MM/yyyy'}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="currentTemplateView == 'emailTemplate3'">
+                                <div class="template-header" style="height: 150px;padding: 10px;text-align: center;position: relative;">
+                                    <img src="{{compinfo.companyLogo}}" alt="" style="height: 100px;position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto;">
+                                </div>
+                                <div style="text-align: center">
+                                    <div style="margin: 5px 0;color: #aaaaaa;">{{compinfo.companyName}}</div>
+                                    <div style="margin-left: 25%;margin-right:25%;height: 1px;border-top: solid 1px #eee"></div>
+                                    <div style="margin: 5px 0;color: #aaaaaa;">{{compinfo.companyPhone}}</div>
+                                    <div style="margin: 5px 0;color: #aaaaaa;">{{compinfo.companyEmail}}</div>
+                                </div>
+                                <div style="overflow: hidden;background: #f7f7f7;color: #aaa;">
+                                    <div style="margin: 5px 0;text-align: center">{{compinfo.companyAddress}}</div>
+                                </div>
+                                <div class="bg-blue" style="height: 40px;text-align: center;background: #05a3ec;color: #fff;margin-bottom: 10px">
+                                    <div style="font-size: 20px;padding: 5px 0;">INVOICE</div>
+                                </div>
+                                <div class="sub-header" style="padding: 10px;overflow: hidden;">
+                                    <div class="left-content" style="width: 67%;float: left;padding-right: 30px;">
+                                        <div style="margin-bottom: 5px;text-transform: capitalize">{{vm.selectedAdjustment.customer}}</div>
+                                        <div style="margin-bottom: 5px">{{customerAddress}}</div>
+                                        <div style="margin-bottom: 5px">{{customerPhone}}</div>
+                                        <div>{{customerEmail}}</div>
+                                    </div>
+                                    <div class="right-content" style="width: 33%;float: right;">
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div><span style="color: #aaa;">Adjustment no: </span>  {{vm.selectedAdjustment.guadjustmentid}}</div>
+                                        </div>
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div><span style="color: #aaa;">Adjustment type: </span>  {{SelectedInvoice.invoiceType}}</div>
+                                        </div>
+                                        <div class="inner-left" style="margin-bottom: 10px">
+                                            <div><span style="color: #aaa;">Created date: </span>  {{SelectedInvoice.invoiceDate | parseDate | date: 'dd/MM/yyyy'}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="currentTemplateView == 'emailTemplate4'">
+                                <div class="bg-blue" style="height: 40px;text-align: center;background-color: #05a3ec;color: #fff;margin-bottom: 30px">
+                                    <div style="font-size: 20px;padding: 5px 0;">ADJUSTMENT</div>
+                                </div>
+                                <div class="sub-header" style="padding: 10px;overflow: hidden;">
+                                    <div class="left-content" style="width: 50%;float: left;">
+                                        <div style="margin-bottom: 20px">
+                                            <div><span style="color: #aaa;">Adjustment no: </span>  {{vm.selectedAdjustment.guadjustmentid}}</div>
+                                            <div><span style="color: #aaa;">Invoice type: </span>  {{SelectedInvoice.invoiceType}}</div>
+                                            <div><span style="color: #aaa;">Created date: </span>  {{SelectedInvoice.invoiceDate | parseDate | date: 'dd/MM/yyyy'}}</div>
+                                        </div>
+                                        <div>{{vm.selectedAdjustment.customer}}</div>
+                                        <div>{{customerAddress}}</div>
+                                        <div>{{customerPhone}}</div>
+                                        <div>{{customerEmail}}</div>
+                                    </div>
+                                    <div class="right-content" style="width: 50%;float: right;">
+                                        <div class="logo" style="position:relative;float: left;width:100px;height: 150px;border-right:solid 1px #eee;">
+                                            <img src="{{compinfo.companyLogo}}" alt="" style="position:absolute;padding-right:10px;height: 90px;left: 0;right: 0;top: 0;bottom: 0;margin: auto;">
+                                        </div>
+                                        <div style="float: left;margin-left: 10px;max-width: 177px;">
+                                            <div><h3>{{compinfo.companyName}}</h3></div>
+                                            <div>{{compinfo.companyAddress}}</div>
+                                            <div style="clear: both;color: #aaa;padding-top: 10px;margin-top: 10px;font-size: 12px;">
+                                                <div style="margin-bottom: 5px">{{compinfo.companyPhone}}</div>
+                                                <div>{{compinfo.companyEmail}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list" style="margin: 10px;">
+                                <div class="list-header" style="overflow: hidden;padding: 10px;background: #eee;font-size: 13px">
+                                    <div style="color: #aaa;width: 15%;float: left">
+                                        Invoice id
+                                    </div>
+                                    <div style="color: #aaa;width: 15%;float: left">
+                                        Invoice date
+                                    </div>
+                                    <div style="color: #aaa;width: 15%;float: left">
+                                        Invoice type
+                                    </div>
+                                    <div style="color: #aaa;width: 15%;float: left">
+                                        Currency
+                                    </div>
+                                    <div style="width: 5%;float: left;height: 10px;"></div>
+                                    <div style="color: #aaa;width: 15%;float: left;text-align: right">
+                                        Invoice amount
+                                    </div>
+                                    <div style="width: 5%;float: left;height: 10px;"></div>
+                                    <div style="color: #aaa;width: 15%;float: left;text-align: right">
+                                        Paid amount
+                                    </div>
+                                </div>
+                                <div class="list-item" style="font-size:13px;border-bottom: solid 1px #eee;padding: 10px;overflow: hidden;">
+                                    <div style="float: left;color: #aaa;width: 15%">{{vm.selectedAdjustment.invoiceid}}<span ng-if="vm.selectedAdjustment.invoiceid == '' || vm.selectedAdjustment.invoiceid == null">-</span> </div>
+                                    <div style="float: left;color: #aaa;width: 15%">
+                                        {{SelectedInvoice.invoiceDate | limitTo:10}}
+                                    </div>
+                                    <div style="float: left;color: #aaa;width: 15%">
+                                        {{SelectedInvoice.invoiceType}}
+                                    </div>
+                                    <div style="float: left;color: #aaa;width: 15%">
+                                        {{SelectedInvoice.currency}}
+                                    </div>
+                                    <div style="width: 5%;float: left;height: 10px;"></div>
+                                    <div style="float: left;color: #aaa;width: 15%;text-align: right">
+                                        {{SelectedInvoice.currencyAmount}}
+                                    </div>
+                                    <div style="width: 5%;float: left;height: 10px;"></div>
+                                    <div style="float: left;color: #aaa;width: 15%;text-align: right">
+                                        {{SelectedInvoice.paidAmount}}
+                                    </div>
+                                </div>
+                                <div style="overflow: hidden;margin-bottom: 10px;margin-top: 10px;padding-right: 10px">
+                                    <div style="width: 50%;height: 10px;float: left;"></div>
+                                    <div style="width: 50%;float: left;">
+                                        <div style="float: left;color: #aaa;width: 50%">Invoice status</div>
+                                        <div style="float: left;color: #aaa;width: 50%;text-align: right">{{SelectedInvoice.invoiceStatus}}</div>
+                                    </div>
+                                </div>
+                                <div class="list-footer" style="overflow: hidden;height: 40px;margin-top: 30px;padding-right: 10px">
+                                    <div style="width: 50%;height: 10px;float: left;"></div>
+                                    <div style="width: 50%;float: left;padding: 5px 0">
+                                        <div style="color: #aaaaaa;font-size: 16px;width: 50%;float: left;">TOTAL</div>
+                                        <div style="color: #aaaaaa;text-align: right;width: 50%;float: left;" ng-if="vm.selectedAdjustment.adjustmenttype != 'Debit'">{{vm.selectedAdjustment.amount| isoCurrency:vm.selectedAdjustment.currency }}</div>
+                                        <div style="color: #aaaaaa;text-align: right;width: 50%;float: left;" ng-if="vm.selectedAdjustment.adjustmenttype === 'Debit'">{{vm.selectedAdjustment.amount| isoCurrency:vm.selectedAdjustment.currency}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="template-footer" style="width: 100%;margin-top: 40px;padding: 10px;position:absolute;bottom: 0;">
+                                <div style="margin: 5px 0;font-size: 12px">{{content.greeting}}</div>
+                                <div style="font-size: 12px;color: #aaa;padding-top: 5px;border-top: solid 1px #eee">
+                                    {{content.disclaimer}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / INVOICE -->
+
+                    <!-- Use the following element to add breaks to your pages -->
+                    <!-- This will make sure that the section after this element will be printed on a new page -->
+                    <div class="page-break"></div>
+                </md-content>
+            </div>
+            <!-- / INPAGE READ PANE-->
+        </div>
+
+    </div>
+    <!-- / CENTER -->
+    <!-- / CONTENT CARD -->
+
+</div>

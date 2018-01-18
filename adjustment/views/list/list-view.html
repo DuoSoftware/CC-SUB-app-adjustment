@@ -1,0 +1,93 @@
+<!-- PRODUCT LIST ITEMS -->
+<div class="main-list-preloader animate-fade-in-out" layout="row" layout-sm="column" layout-align="space-around" ng-if="!vm.listLoaded">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+
+<div class="main-empty-list" ng-if="vm.adjustments.length == 0 && vm.listLoaded">
+    <div>
+        <img src="assets/images/empty-list.gif" alt="Nothing to show">
+        <h2>Nothing to Show</h2>
+    </div>
+</div>
+
+<!-- INVOICE LIST ITEMS -->
+<div class="list-item" layout="row" layout-align="center center" flex ng-repeat="adjustment in vm.adjustments | filter: vm.search | filter: global.search"
+     md-ink-ripple
+     ng-click="vm.selectAdjustment(adjustment)"
+     ng-class="{'selected': vm.selectedAdjustment === adjustment && showInpageReadpane}">
+
+    <div layout="row" layout-align="center center" flex>
+
+        <div class="dual-info" layout="column" layout-align="center start" flex>
+            <span ng-if="!showInpageReadpane">{{adjustment.customer}}</span>
+            <span ng-if="showInpageReadpane">{{adjustment.customer|limitTo:15}}<span ng-if="adjustment.customer.length > 15">...</span></span>
+            <div class="dual-info-sub">
+                <span class="fw-500">Adjustment id :</span> {{adjustment.guadjustmentid}}
+            </div>
+        </div>
+
+        <div flex layout="column" layout-align="center start" ng-if="!showInpageReadpane">
+            {{adjustment.createdDate | parseDate | date: 'dd'}} {{adjustment.createdDate | parseDate | date: 'MMMM' | limitTo:3}} {{adjustment.createdDate | parseDate | date: 'yyyy'}}
+        </div>
+
+        <div flex layout="column" layout-align="center start" ng-class="{'flex-30':showInpageReadpane == true,'flex': showInpageReadpane == false}">
+            <span>{{adjustment.adjustmenttype}}</span>
+        </div>
+
+        <div flex layout="column" layout-align="center end" ng-if="!showInpageReadpane">
+            <span flex class="pr-40">{{adjustment.amount | isoCurrency:adjustment.currency }}</span>
+        </div>
+
+        <!--<div class="status" layout="column" layout-align="center start" ng-class="{'flex-30':showInpageReadpane == true,'flex-10': showInpageReadpane == false}">-->
+            <!--<span class="pill" layout="row" layout-align="center center" ng-class="{'negative':coupon.status==='Expired','positive':coupon.status==='Active'}">{{coupon.status}}</span>-->
+        <!--</div>-->
+    </div>
+</div>
+
+<!--<div class="promomail-list-item" ng-repeat="coupon in vm.coupons | filter: vm.search | filter: global.search"-->
+<!--md-ink-ripple-->
+<!--ng-click="switchInfoPane('show',coupon)"-->
+<!--ng-class="{'selected': vm.selectedMail === coupon}">-->
+
+<!--<div layout="row" layout-align="start center">-->
+
+
+<!--<div class="info" flex layout="row" style="height: 55px">-->
+
+<!--&lt;!&ndash;<div class="prodMainInfo" layout="column" layout-align="center start" style="width: 190px;">&ndash;&gt;-->
+<!--<div class="promoMainInfo" layout="column" layout-align="center start" flex style="padding-left: 0px;">-->
+<!--<span style="height: 25px">{{coupon.couponcode}}</span>-->
+<!--<div class="promoType">-->
+<!--Coupon id : {{coupon.gucouponid}}-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="client" flex layout="column" layout-align="center start">-->
+<!--<span>{{coupon.startdate | parseDate | date: 'dd'}} {{coupon.startdate | parseDate | date: 'MMMM' | limitTo:3}} {{coupon.startdate | parseDate | date: 'yyyy'}}</span>-->
+<!--&lt;!&ndash;<span>{{coupon.startdate | parseDate | date: 'MMMM' | limitTo:3}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span>{{coupon.startdate | parseDate | date: 'yyyy'}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="text-truncate">{{coupon.startdate | date:'yyyy-MM-dd'}} </span>&ndash;&gt;-->
+<!--</div>-->
+<!--<div class="client" ng-if="coupon.enddate != ''" class="prodMainInfo topMargin" flex layout="column" layout-align="center start">-->
+<!--<span>{{coupon.enddate | parseDate | date: 'dd'}} {{coupon.enddate | parseDate | date: 'MMMM' | limitTo:3}} {{coupon.enddate | parseDate | date: 'yyyy'}}</span>-->
+<!--&lt;!&ndash;<span>{{coupon.enddate | parseDate | date: 'MMMM' | limitTo:3}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span>{{coupon.enddate | parseDate | date: 'yyyy'}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="text-truncate" ng-if="coupon.enddate != ''">{{coupon.enddate | date:'yyyy-MM-dd'}}</span>&ndash;&gt;-->
+<!--</div>-->
+<!--<div class="date" ng-if="coupon.enddate == ''" class="prodMainInfo topMargin" flex layout="column" layout-align="center start">-->
+<!--<span>No End Date</span>-->
+<!--</div>-->
+<!--<div class="client" flex="20" layout="column" layout-align="center start">-->
+<!--<span class="text-truncate">{{coupon.noofoccurence}}</span>-->
+<!--</div>-->
+<!--<div class="status" flex="10" layout="column" layout-align="center start">-->
+<!--<span class="text-truncate promoState" ng-class="{true: 'promoActive', false: 'promoExpired'}[coupon.status == 'Active']">{{coupon.status}}</span>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--</div>-->
+<div class="adjustment-list-item" layout="row" layout-align="center center" ng-show="showMoreButton">
+    <md-button ng-click="loadMoreAdjustment()" class="md-primary" style="font-size: 12px;font-weight: 400"><md-icon md-font-icon="icon-magnify"></md-icon> More</md-button>
+</div>
+<!-- PRODUCT LIST ITEMS -->
