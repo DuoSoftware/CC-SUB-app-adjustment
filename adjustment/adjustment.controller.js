@@ -965,6 +965,35 @@
 
 		// add controller
 
+    //---add new profile---
+    $scope.addNewUser = function(ev)
+    {
+      //console.log("yes");
+      //$scope.content.user = "";
+      $mdDialog.show({
+        controller: 'AddNewAdjUserController',
+        templateUrl: 'app/main/adjustment/composeNewUser-dialog.html',
+        controllerAs       : 'vm',
+        locals             : {
+          selectedMail: undefined,
+          category: "Customer"
+        },
+        parent: angular.element($document.body),
+        targetEvent: ev,
+        clickOutsideToClose:true
+      })
+        .then(function(user) {
+          if(user != undefined)
+          {
+            $scope.initialCustomers.push({customerId: user.profileId, customerName: user.first_name+' '+user.last_name});
+            $scope.customers.push({customerId: user.profileId, customerName: user.first_name+' '+user.last_name});
+            $scope.content.customer={customerId: user.profileId, customerName: user.first_name+' '+user.last_name};
+            //ctrl.searchText[pro.line]=user.first_name+' '+user.last_name;
+          }
+        })
+
+    }
+
 
 
 		$scope.content = [];
