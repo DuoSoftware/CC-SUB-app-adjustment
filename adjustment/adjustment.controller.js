@@ -195,10 +195,10 @@
 			var __st = gst("domain");
 			return (_st != null) ? _st : __st; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
 		}
-
+		
 		function getDomainExtension() {
 			var _st = gst("extension_mode");
-      if(_st=="ssandbox"){
+      if(_st=="ssandbox"||_st=="sandbox"){
         _st="test";
       }
 			return (_st != null) ? _st : "test"; //"248570d655d8419b91f6c3e0da331707 51de1ea9effedd696741d5911f77a64f";
