@@ -664,13 +664,6 @@
         $scope.isCustSearchDisable = false;
 
         //
-        $scope.SelectedInvoice = {
-            name : "",
-            unitPrice : "",
-            gty : "",
-            promotion : "",
-            totalPrice : ""
-        };
 
         $scope.querySearch =function(query) {
 
@@ -1351,6 +1344,13 @@
                 })
 
             }else{
+                $scope.SelectedInvoice = {
+                    invoiceid : "",
+                    invoiceType : "",
+                    currency : "",
+                    currencyAmount : "",
+                    paidAmount : ""
+                };
                 LoadProfileDetails(adjustment);
             }
 
@@ -1370,7 +1370,7 @@
             });
         }
 
-        function LoadProfileDetails (adjustment) {
+        function LoadProfileDetails (adjustment, ) {
             $charge.profile().getByID(adjustment.customerId).success(function(data) {
 
                 for(var i=0;i<data.length;i++)
