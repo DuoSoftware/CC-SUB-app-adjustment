@@ -1370,7 +1370,7 @@
             });
         }
 
-        function LoadProfileDetails (adjustment, ) {
+        function LoadProfileDetails (adjustment) {
             $charge.profile().getByID(adjustment.customerId).success(function(data) {
 
                 for(var i=0;i<data.length;i++)
