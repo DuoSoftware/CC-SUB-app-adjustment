@@ -664,6 +664,14 @@
         $scope.isCustSearchDisable = false;
 
         //
+        $scope.SelectedInvoice = {
+            name : "",
+            unitPrice : "",
+            gty : "",
+            promotion : "",
+            totalPrice : ""
+        };
+
         $scope.querySearch =function(query) {
 
             finalKeyword = query;
@@ -1336,67 +1344,14 @@
 
                     }
 
-                    $charge.profile().getByID(adjustment.customerId).success(function(data) {
-
-                        for(var i=0;i<data.length;i++)
-                        {
-                            $scope.customerAddress = data[i].bill_addr;
-                            $scope.customerPhone = data[i].phone;
-                            $scope.customerEmail = data[i].email_addr;
-                        }
-                        $scope.customerAddress = $scope.customerPhone =  $scope.customerEmail = '';
-                        var docinfo = {
-                            type : 'adjustment',
-                            company : {
-                                companyName : $scope.compinfo.companyName,
-                                companyPhone : $scope.compinfo.companyPhone,
-                                companyEmail : $scope.compinfo.companyEmail,
-                                companyAddress : $scope.compinfo.companyAddress,
-                                companyLogo : $scope.compinfo.companyLogo
-                            },
-                            client : {
-                                clientName : vm.selectedAdjustment.customer,
-                                clientPhone : $scope.customerPhone,
-                                clientAddress : $scope.customerAddress,
-                                clientEmail : $scope.customerEmail
-                            },
-                            transaction : {
-                                guadjustmentid : vm.selectedAdjustment.guadjustmentid,
-                                adjustmenttype : vm.selectedAdjustment.adjustmenttype,
-                                createdDate : vm.selectedAdjustment.createdDate,
-                                invoiceDate : $scope.SelectedInvoice.invoiceDate,
-                                invoiceType : $scope.SelectedInvoice.invoiceType,
-                                invoiceid : vm.selectedAdjustment.invoiceid,
-                                currency : $scope.SelectedInvoice.currency,
-                                currencyAmount : $scope.SelectedInvoice.currencyAmount,
-                                paidAmount : $scope.SelectedInvoice.paidAmount,
-                                invoiceStatus : $scope.SelectedInvoice.invoiceStatus,
-                                amount : vm.selectedAdjustment.amount,
-                                invoiceDetails : [{
-                                    name : vm.selectedAdjustment.invoiceid,
-                                    unitPrice : $scope.SelectedInvoice.invoiceType,
-                                    gty : $scope.SelectedInvoice.currency,
-                                    promotion : $scope.SelectedInvoice.currencyAmount,
-                                    totalPrice : $scope.SelectedInvoice.paidAmount
-                                }]
-                            }
-                        };
-
-                        var t = transactionTemplateGenerator(docinfo);
-                        var preview = $('#print-content');
-                        preview.children().remove();
-                        preview.append(t);
-                        $scope.isReadLoaded = true;
-
-                    }).error(function(data) {
-                        //console.log(data);
-                        $scope.isReadLoaded = true;
-                    })
+                    LoadProfileDetails(adjustment);
                 }).error(function(data) {
                     $scope.isReadLoaded = true;
                     //console.log(data);
                 })
 
+            }else{
+                LoadProfileDetails(adjustment);
             }
 
             $timeout(function ()
@@ -1413,6 +1368,65 @@
                 // Scroll to the top
                 vm.scrollEl.scrollTop(0);
             });
+        }
+
+        function LoadProfileDetails (adjustment) {
+            $charge.profile().getByID(adjustment.customerId).success(function(data) {
+
+                for(var i=0;i<data.length;i++)
+                {
+                    $scope.customerAddress = data[i].bill_addr;
+                    $scope.customerPhone = data[i].phone;
+                    $scope.customerEmail = data[i].email_addr;
+                }
+                $scope.customerAddress = $scope.customerPhone =  $scope.customerEmail = '';
+                var docinfo = {
+                    type : 'adjustment',
+                    company : {
+                        companyName : $scope.compinfo.companyName,
+                        companyPhone : $scope.compinfo.companyPhone,
+                        companyEmail : $scope.compinfo.companyEmail,
+                        companyAddress : $scope.compinfo.companyAddress,
+                        companyLogo : $scope.compinfo.companyLogo
+                    },
+                    client : {
+                        clientName : vm.selectedAdjustment.customer,
+                        clientPhone : $scope.customerPhone,
+                        clientAddress : $scope.customerAddress,
+                        clientEmail : $scope.customerEmail
+                    },
+                    transaction : {
+                        guadjustmentid : vm.selectedAdjustment.guadjustmentid,
+                        adjustmenttype : vm.selectedAdjustment.adjustmenttype,
+                        createdDate : vm.selectedAdjustment.createdDate,
+                        invoiceDate : $scope.SelectedInvoice.invoiceDate,
+                        invoiceType : $scope.SelectedInvoice.invoiceType,
+                        invoiceid : vm.selectedAdjustment.invoiceid,
+                        currency : $scope.SelectedInvoice.currency,
+                        currencyAmount : $scope.SelectedInvoice.currencyAmount,
+                        paidAmount : $scope.SelectedInvoice.paidAmount,
+                        invoiceStatus : $scope.SelectedInvoice.invoiceStatus,
+                        amount : vm.selectedAdjustment.amount,
+                        invoiceDetails : [{
+                            name : vm.selectedAdjustment.invoiceid,
+                            unitPrice : $scope.SelectedInvoice.invoiceType,
+                            gty : $scope.SelectedInvoice.currency,
+                            promotion : $scope.SelectedInvoice.currencyAmount,
+                            totalPrice : $scope.SelectedInvoice.paidAmount
+                        }]
+                    }
+                };
+
+                var t = transactionTemplateGenerator(docinfo);
+                var preview = $('#print-content');
+                preview.children().remove();
+                preview.append(t);
+                $scope.isReadLoaded = true;
+
+            }).error(function(data) {
+                //console.log(data);
+                $scope.isReadLoaded = true;
+            })
         }
 
         $scope.compinfo={};

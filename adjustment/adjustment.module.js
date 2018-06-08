@@ -1,9 +1,9 @@
 ////////////////////////////////
 // App : Adjustment
 // Owner  : Ishara Gunathilaka
-// Last changed date : 2018/06/06
-// Version : 6.1.0.8
-// Modified By : Kasun
+// Last changed date : 2018/06/08
+// Version : 6.1.0.9
+// Modified By : Gihan
 /////////////////////////////////
 
 
